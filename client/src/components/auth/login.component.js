@@ -21,17 +21,27 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser } from '../../services/authServices';
+import Logo from '../../images/logo/logo-gradient.svg';
+import './login.component.css';
 
 const styles = (theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(6),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
+  img: {
+    width: 70,
+    height: 80,
+    marginBottom: theme.spacing(1),
+  },
+  logo: {
+    marginBottom: theme.spacing(2),
+  },
   avatar: {
     margin: theme.spacing(1),
-    background: 'linear-gradient(to right bottom, #6200ea, #3f51b5)',
+    background: theme.palette.secondary.main,
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -131,6 +141,10 @@ class LoginComponent extends Component {
       <Container component="main" className={this.props.classes.root}>
         <CssBaseline />
         <div className={this.props.classes.paper}>
+          <img className={this.props.classes.img} alt="Logo" src={Logo} />
+          <Typography component="h1" variant="h2" className="text">
+            MERN-Payroll
+          </Typography>
           <Avatar className={this.props.classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
