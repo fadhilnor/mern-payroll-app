@@ -10,9 +10,9 @@ const Routes = () => {
   return (
     <Router>
       <Route exact path="/" component={PublicRoute} />
-      <Route path="/register" component={PublicRoute} />
+      <Route exact path="/register" component={PublicRoute} />
       <Switch>
-        <PrivateRoute component={DashboardView} layout={MainLayout} path="/dashboard" />
+        <PrivateRoute component={DashboardView} layout={MainLayout} exact path="/dashboard" />
       </Switch>
     </Router>
   );
