@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const morgan = require('morgan');
+const path = require('path');
 
 require('dotenv').config();
 const app = express();
