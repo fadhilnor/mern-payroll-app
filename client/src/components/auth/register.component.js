@@ -97,9 +97,9 @@ class Register extends Component {
   onChangeEmail(e) {
     e.persist();
     if (
-      e.target.value.length == 0 ||
+      e.target.value.length === 0 ||
       e.target.value.match(
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       )
     ) {
       this.setState({
@@ -154,7 +154,6 @@ class Register extends Component {
 
   render() {
     const self = this.state;
-    const disabled = self.errors.length > 0 || !self.name || !self.email || !self.password || !self.passwordConfirm;
     return (
       <Container component="main" className={this.props.classes.root}>
         <CssBaseline />
