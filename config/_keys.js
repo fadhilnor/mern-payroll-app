@@ -7,4 +7,5 @@ secretOrKey = 'APP_SECRET_KEY';
 
 module.exports = {
   mongoURI: dbPassword,
+  secretOrKey,
 };
