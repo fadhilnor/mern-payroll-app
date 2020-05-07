@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Divider, Drawer, Hidden, IconButton, Typography } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import InputIcon from '@material-ui/icons/Input';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import { Profile, SidebarNav } from './components';
 import { logoutUser } from '../../../../services/authServices';
@@ -47,6 +48,11 @@ const Sidebar = (props) => {
       title: 'Dashboard',
       href: '/dashboard',
       icon: <DashboardIcon />,
+    },
+    {
+      title: 'Settings',
+      href: '/settings',
+      icon: <SettingsIcon />,
     },
   ];
 
