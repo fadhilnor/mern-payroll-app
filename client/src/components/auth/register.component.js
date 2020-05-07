@@ -21,6 +21,7 @@ import { connect } from 'react-redux';
 import { registerUser } from '../../services/authServices';
 import Logo from '../../images/logo/logo-gradient.svg';
 import './register.component.css';
+import Backdrop from '../../layouts/Main/components/Backdrop';
 
 const styles = (theme) => ({
   paper: {
@@ -168,6 +169,7 @@ class Register extends Component {
       <Container component="main" className={this.props.classes.root}>
         <CssBaseline />
         <div className={this.props.classes.paper}>
+          <Backdrop />
           <img className={this.props.classes.img} alt="Logo" src={Logo} />
           <Typography component="h1" variant="h2" className="text">
             MERN-Payroll

@@ -7,6 +7,8 @@ import processToken from '../utils/processToken';
 
 // Register User
 export const registerUser = (userData) => (dispatch) => {
+  // Toggle on loading animation
+  dispatch(setUserLoading(true));
   axios
     .post('/users/register', userData)
     .then((res) => {
@@ -15,18 +17,24 @@ export const registerUser = (userData) => (dispatch) => {
       processToken(token).then((decoded) => {
         // Set current user
         dispatch(setCurrentUser(decoded));
+        // Toggle off loading animation
+        dispatch(setUserLoading(false));
       });
     })
-    .catch((err) =>
+    .catch((err) => {
+      // Toggle off loading animation
+      dispatch(setUserLoading(false));
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data.error,
-      })
-    );
+      });
+    });
 };
 
 // Login - get user token
 export const loginUser = (userData) => (dispatch) => {
+  // Toggle on loading animation
+  dispatch(setUserLoading(true));
   axios
     .post('/users/login', userData)
     .then((res) => {
@@ -35,9 +43,13 @@ export const loginUser = (userData) => (dispatch) => {
       processToken(token).then((decoded) => {
         // Set current user
         dispatch(setCurrentUser(decoded));
+        // Toggle off loading animation
+        dispatch(setUserLoading(false));
       });
     })
     .catch((err) => {
+      // Toggle off loading animation
+      dispatch(setUserLoading(false));
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data.error,
@@ -54,9 +66,10 @@ export const setCurrentUser = (decoded) => {
 };
 
 // User loading
-export const setUserLoading = () => {
+export const setUserLoading = (payload) => {
   return {
     type: USER_LOADING,
+    payload: payload,
   };
 };
 
