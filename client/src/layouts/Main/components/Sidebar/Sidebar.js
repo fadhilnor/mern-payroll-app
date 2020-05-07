@@ -1,11 +1,14 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
-import { Divider, Drawer } from '@material-ui/core';
+import { Divider, Drawer, Hidden, IconButton, Typography } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import InputIcon from '@material-ui/icons/Input';
 
 import { Profile, SidebarNav } from './components';
+import { logoutUser } from '../../../../services/authServices';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -28,12 +31,16 @@ const useStyles = makeStyles((theme) => ({
   nav: {
     marginBottom: theme.spacing(2),
   },
+  signOutLabel: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 const Sidebar = (props) => {
   const { open, variant, onClose, className, ...rest } = props;
 
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const pages = [
     {
@@ -49,6 +56,15 @@ const Sidebar = (props) => {
         <Profile />
         <Divider className={classes.divider} />
         <SidebarNav className={classes.nav} pages={pages} />
+        <Hidden mdUp>
+          <Divider className={classes.divider} />
+          <IconButton color="inherit" onClick={() => dispatch(logoutUser())}>
+            <InputIcon />
+            <Typography className={classes.signOutLabel} color="inherit" variant="body2">
+              Sign Out
+            </Typography>
+          </IconButton>
+        </Hidden>
       </div>
     </Drawer>
   );
