@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardHeader, CardContent, CardActions, Divider, Button, TextField } from '@material-ui/core';
+
+import { updateUserPassword } from '../../../../services/authServices';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -10,6 +13,7 @@ const useStyles = makeStyles(() => ({
 
 const Password = (props) => {
   const { className, ...rest } = props;
+  const dispatch = useDispatch();
 
   const classes = useStyles();
 
@@ -23,6 +27,10 @@ const Password = (props) => {
       ...values,
       [event.target.name]: event.target.value,
     });
+  };
+
+  const handleUpdate = (event) => {
+    dispatch(updateUserPassword());
   };
 
   return (
@@ -53,7 +61,7 @@ const Password = (props) => {
         </CardContent>
         <Divider />
         <CardActions>
-          <Button color="primary" variant="outlined">
+          <Button color="primary" variant="outlined" onClick={handleUpdate}>
             Update
           </Button>
         </CardActions>

@@ -5,6 +5,8 @@ import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import processToken from '../utils/processToken';
 
+import { setSnackbarMessageSuccess } from './snackbarServices';
+
 // Register User
 export const registerUser = (userData) => (dispatch) => {
   // Toggle on loading animation
@@ -55,6 +57,13 @@ export const loginUser = (userData) => (dispatch) => {
         payload: err.response.data.error,
       });
     });
+};
+
+// Update user password
+export const updateUserPassword = () => (dispatch) => {
+  // TO DO - Add backend api
+  const message = 'Update Success!';
+  dispatch(setSnackbarMessageSuccess(message));
 };
 
 // Set logged in user
