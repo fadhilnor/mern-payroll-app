@@ -1,9 +1,21 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
-import { Card, CardHeader, CardContent, CardActions, Divider, Button, TextField } from '@material-ui/core';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Divider,
+  Button,
+  TextField,
+  InputAdornment,
+  IconButton,
+} from '@material-ui/core';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { updateUserPassword } from '../../../../services/authServices';
 
@@ -13,6 +25,7 @@ const useStyles = makeStyles(() => ({
 
 const Password = (props) => {
   const { className, ...rest } = props;
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const classes = useStyles();
@@ -20,6 +33,8 @@ const Password = (props) => {
   const [values, setValues] = useState({
     password: '',
     confirm: '',
+    showPassword: false,
+    showPasswordConfirm: false,
   });
 
   const handleChange = (event) => {
@@ -29,8 +44,20 @@ const Password = (props) => {
     });
   };
 
-  const handleUpdate = (event) => {
-    dispatch(updateUserPassword());
+  const handleToggle = (name) => () => {
+    setValues({
+      ...values,
+      [name]: !values[name],
+    });
+  };
+
+  const handleUpdate = () => {
+    const newUpdate = {
+      email: user.email,
+      password: values.password,
+      passwordConfirm: values.confirm,
+    };
+    dispatch(updateUserPassword(newUpdate));
   };
 
   return (
@@ -44,9 +71,18 @@ const Password = (props) => {
             label="Password"
             name="password"
             onChange={handleChange}
-            type="password"
             value={values.password}
             variant="outlined"
+            type={values.showPassword ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton name="showPassword" aria-label="toggle password visibility" onClick={handleToggle('showPassword')}>
+                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             fullWidth
@@ -54,9 +90,22 @@ const Password = (props) => {
             name="confirm"
             onChange={handleChange}
             style={{ marginTop: '1rem' }}
-            type="password"
             value={values.confirm}
             variant="outlined"
+            type={values.showPasswordConfirm ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    name="showPasswordConfirm"
+                    aria-label="toggle password visibility"
+                    onClick={handleToggle('showPasswordConfirm')}
+                  >
+                    {values.showPasswordConfirm ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
         </CardContent>
         <Divider />
