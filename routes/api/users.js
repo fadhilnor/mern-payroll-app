@@ -4,12 +4,24 @@ const passport = require('passport');
 
 let User = require('../../models/Users');
 const assignToken = require('../../utils/assignToken');
+const verifyToken = require('../../utils/verifyToken');
 
 // Get all user
 router.route('/').get((req, res) => {
-  User.find()
-    .then((users) => res.json(users))
-    .catch((err) => res.status(400).json('Error: ' + err));
+  const token = req.headers['x-access-token'] || req.headers['authorization'];
+  verifyToken(token)
+    .then(() => {
+      User.find()
+        .then((users) => {
+          return res.json(users);
+        })
+        .catch((err) => {
+          return res.status(400).json('Error: ' + err);
+        });
+    })
+    .catch((err) => {
+      return res.status(400).json(err);
+    });
 });
 
 // Register new user
@@ -121,11 +133,50 @@ router.route('/login').post((req, res, next) => {
   }
 });
 
-// Logout
-router.get('/logout', (req, res) => {
-  req.logout();
-  req.flash('success_msg', 'You are logged out');
-  res.redirect('/users/login');
+// Update user password
+router.route('/updatePassword').post((req, res) => {
+  const token = req.headers['x-access-token'] || req.headers['authorization'];
+  verifyToken(token)
+    .then(() => {
+      const { email, password, passwordConfirm } = req.body;
+      let errorMessage = '';
+
+      // Passwords validation
+      if (!password || !passwordConfirm) {
+        errorMessage = 'Please enter all fields';
+        return res.status(400).json(errorMessage);
+      }
+      if (password !== passwordConfirm) {
+        errorMessage = 'Passwords do not match';
+        return res.status(400).json(errorMessage);
+      }
+      if (password.length < 5) {
+        errorMessage = 'Passwords must be at least 5 characters';
+        return res.status(400).json(errorMessage);
+      }
+
+      // Update user
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
+          if (err) {
+            errorMessage = 'Something went wrong. Please try again';
+            return res.status(400).json(errorMessage);
+          }
+          const newPassword = hash;
+          User.findOneAndUpdate({ email: email }, { $set: { password: newPassword } }, { new: true }, (err, doc) => {
+            if (err) {
+              errorMessage = 'Password could not be updated at the moment. Please try again.';
+              return res.status(400).json(errorMessage);
+            } else {
+              return res.json('Password update successful!');
+            }
+          });
+        });
+      });
+    })
+    .catch((err) => {
+      return res.status(400).json(err);
+    });
 });
 
 module.exports = router;

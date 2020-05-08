@@ -20,6 +20,7 @@ mongoose
   .connect(process.env.mongoURI || require('./config/keys').mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
   })
   .then(() => console.log('MongoDB database connection established successfully'))
   .catch((err) => console.log(err));

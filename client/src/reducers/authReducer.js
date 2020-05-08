@@ -18,6 +18,7 @@ export default function (state = initialState, action) {
       };
     case USER_LOADING:
       return {
+        ...state,
         loading: action.payload,
       };
     default:

@@ -5,7 +5,7 @@ import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import processToken from '../utils/processToken';
 
-import { setSnackbarMessageSuccess } from './snackbarServices';
+import { setSnackbarMessageSuccess, setSnackbarMessageError } from './snackbarServices';
 
 // Register User
 export const registerUser = (userData) => (dispatch) => {
@@ -60,10 +60,25 @@ export const loginUser = (userData) => (dispatch) => {
 };
 
 // Update user password
-export const updateUserPassword = () => (dispatch) => {
-  // TO DO - Add backend api
-  const message = 'Update Success!';
-  dispatch(setSnackbarMessageSuccess(message));
+export const updateUserPassword = (userData) => (dispatch) => {
+  // Toggle on loading animation
+  dispatch(setUserLoading(true));
+  axios
+    .post('/users/updatePassword', userData)
+    .then((res) => {
+      // Toggle off loading animation
+      dispatch(setUserLoading(false));
+
+      // Toggle on notification
+      dispatch(setSnackbarMessageSuccess(res.data));
+    })
+    .catch((err) => {
+      // Toggle off loading animation
+      dispatch(setUserLoading(false));
+
+      // Toggle on notification
+      dispatch(setSnackbarMessageError(err.response.data));
+    });
 };
 
 // Set logged in user
