@@ -57,7 +57,15 @@ const Password = (props) => {
       password: values.password,
       passwordConfirm: values.confirm,
     };
-    dispatch(updateUserPassword(newUpdate));
+    dispatch(updateUserPassword(newUpdate))
+      .then(() => {
+        setValues({
+          ...values,
+          password: '',
+          confirm: '',
+        });
+      })
+      .catch(() => {});
   };
 
   return (

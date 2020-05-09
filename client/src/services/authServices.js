@@ -60,10 +60,10 @@ export const loginUser = (userData) => (dispatch) => {
 };
 
 // Update user password
-export const updateUserPassword = (userData) => (dispatch) => {
+export const updateUserPassword = (userData) => async (dispatch) => {
   // Toggle on loading animation
-  dispatch(setUserLoading(true));
-  axios
+  await dispatch(setUserLoading(true));
+  await axios
     .post('/users/updatePassword', userData)
     .then((res) => {
       // Toggle off loading animation
@@ -71,6 +71,7 @@ export const updateUserPassword = (userData) => (dispatch) => {
 
       // Toggle on notification
       dispatch(setSnackbarMessageSuccess(res.data));
+      return Promise.resolve();
     })
     .catch((err) => {
       // Toggle off loading animation
@@ -78,6 +79,7 @@ export const updateUserPassword = (userData) => (dispatch) => {
 
       // Toggle on notification
       dispatch(setSnackbarMessageError(err.response.data));
+      return Promise.reject();
     });
 };
 
