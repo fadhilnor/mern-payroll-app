@@ -7,6 +7,7 @@ import { Divider, Drawer, Hidden, IconButton, Typography } from '@material-ui/co
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import InputIcon from '@material-ui/icons/Input';
 import SettingsIcon from '@material-ui/icons/Settings';
+import LocalParkingIcon from '@material-ui/icons/LocalParking';
 
 import { Profile, SidebarNav } from './components';
 import { logoutUser } from '../../../../services/authServices';
@@ -48,6 +49,11 @@ const Sidebar = (props) => {
       title: 'Dashboard',
       href: '/dashboard',
       icon: <DashboardIcon />,
+    },
+    {
+      title: 'Positions',
+      href: '/positions',
+      icon: <LocalParkingIcon />,
     },
     {
       title: 'Settings',
