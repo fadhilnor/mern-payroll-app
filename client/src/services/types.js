@@ -5,3 +5,5 @@ export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const MSG_SUCCESS = 'MSG_SUCCESS';
 export const MSG_ERROR = 'MSG_ERROR';
 export const MSG_REMOVE = 'MSG_REMOVE';
+
+export const GET_POSITIONS = 'GET_POSITIONS';
