@@ -47,7 +47,9 @@ app.use(morgan('tiny'));
 
 // Routes
 const usersRouter = require('./routes/api/users');
+const positionsRouter = require('./routes/api/positions');
 app.use('/users', usersRouter);
+app.use('/positions', positionsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
