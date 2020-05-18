@@ -4,7 +4,7 @@ const Position = require('../../models/Positions');
 const verifyToken = require('../../utils/verifyToken');
 
 // Get all position
-router.route('/getAll').get((req, res) => {
+router.route('/getAll').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {

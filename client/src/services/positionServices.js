@@ -7,7 +7,7 @@ import { setUserLoading } from './authServices';
 // Get all position
 export const getPositions = () => (dispatch) => {
   axios
-    .get('/positions/getAll')
+    .post('/positions/getAll')
     .then((res) => {
       dispatch(setPosition(res.data));
     })
