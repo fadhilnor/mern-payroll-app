@@ -30,7 +30,7 @@ const PositionList = () => {
   return (
     <div className={classes.root}>
       <div className={classes.content}>
-        <PositionTable position={position || []} />
+        <PositionTable position={position} />
       </div>
     </div>
   );

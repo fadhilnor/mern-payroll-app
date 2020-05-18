@@ -8,6 +8,7 @@ const path = require('path');
 
 require('dotenv').config();
 const app = express();
+app.disable('etag');
 
 // Configure port
 const PORT = process.env.PORT || 8080;
