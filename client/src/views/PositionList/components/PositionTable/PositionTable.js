@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
 
-import { addPosition } from '../../../../services/positionServices';
+import { addPosition, updatePosition } from '../../../../services/positionServices';
 
 const PositionTable = (props) => {
   const { position } = props;
@@ -14,9 +14,10 @@ const PositionTable = (props) => {
     setPositions(position);
   }, [position]);
 
-  const [state, setState] = useState({
+  const state = {
     columns: [
-      { title: 'Position', field: 'position', width: 60 },
+      { title: 'Id', field: '_id', hidden: true },
+      { title: 'Position', field: 'position', width: 60, editable: 'onAdd' },
       { title: 'Description', field: 'description', width: 300 },
       {
         title: 'Last updated',
@@ -33,7 +34,7 @@ const PositionTable = (props) => {
         },
       },
     ],
-  });
+  };
 
   return (
     <MaterialTable
@@ -54,28 +55,15 @@ const PositionTable = (props) => {
               .then(() => resolve());
           }),
         onRowUpdate: (newData, oldData) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              if (oldData) {
-                setState((prevState) => {
-                  const data = [...prevState.data];
-                  data[data.indexOf(oldData)] = newData;
-                  return { ...prevState, data };
-                });
-              }
-            }, 600);
-          }),
-        onRowDelete: (oldData) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              setState((prevState) => {
-                const data = [...prevState.data];
-                data.splice(data.indexOf(oldData), 1);
-                return { ...prevState, data };
-              });
-            }, 600);
+          new Promise((resolve, reject) => {
+            dispatch(updatePosition(newData))
+              .then((updatedPosition) => {
+                const data = [...positions];
+                data[data.indexOf(oldData)] = updatedPosition;
+                setPositions(data);
+              })
+              .catch(() => reject())
+              .then(() => resolve());
           }),
       }}
     />

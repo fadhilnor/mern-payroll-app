@@ -2,8 +2,6 @@ import axios from 'axios';
 import { GET_POSITIONS } from './types';
 import { setSnackbarMessageSuccess, setSnackbarMessageError } from './snackbarServices';
 
-import { setUserLoading } from './authServices';
-
 // Get all position
 export const getPositions = () => (dispatch) => {
   axios
@@ -18,22 +16,30 @@ export const getPositions = () => (dispatch) => {
 
 // Add new postion
 export const addPosition = (position) => async (dispatch) => {
-  // Toggle on loading animation
-  await dispatch(setUserLoading(true));
   return await axios
     .post('/positions/add', position)
     .then((res) => {
-      // Toggle off loading animation
-      dispatch(setUserLoading(false));
-
       // Toggle on notification
       dispatch(setSnackbarMessageSuccess(res.data.msg));
       return Promise.resolve(res.data.positions);
     })
     .catch((err) => {
-      // Toggle off loading animation
-      dispatch(setUserLoading(false));
+      // Toggle on notification
+      dispatch(setSnackbarMessageError(err.response.data));
+      return Promise.reject();
+    });
+};
 
+// Update postion
+export const updatePosition = (position) => async (dispatch) => {
+  return await axios
+    .post('/positions/update', position)
+    .then((res) => {
+      // Toggle on notification
+      dispatch(setSnackbarMessageSuccess(res.data.msg));
+      return Promise.resolve(res.data.position);
+    })
+    .catch((err) => {
       // Toggle on notification
       dispatch(setSnackbarMessageError(err.response.data));
       return Promise.reject();
