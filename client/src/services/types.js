@@ -7,3 +7,4 @@ export const MSG_ERROR = 'MSG_ERROR';
 export const MSG_REMOVE = 'MSG_REMOVE';
 
 export const GET_POSITIONS = 'GET_POSITIONS';
+export const GET_DUTIES = 'GET_DUTIES';
