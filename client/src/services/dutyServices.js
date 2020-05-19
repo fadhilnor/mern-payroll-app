@@ -30,6 +30,22 @@ export const addDuty = (duty) => async (dispatch) => {
     });
 };
 
+// Update duty
+export const updateDuty = (duty) => async (dispatch) => {
+  return await axios
+    .post('/duties/update', duty)
+    .then((res) => {
+      // Toggle on notification
+      dispatch(setSnackbarMessageSuccess(res.data.msg));
+      return Promise.resolve(res.data.duty);
+    })
+    .catch((err) => {
+      // Toggle on notification
+      dispatch(setSnackbarMessageError(err.response.data));
+      return Promise.reject();
+    });
+};
+
 // Set Duties
 export const setDuties = (payload) => {
   return {

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
 
-import { addDuty } from '../../../../services/dutyServices';
+import { addDuty, updateDuty } from '../../../../services/dutyServices';
 
 const DutyTable = (props) => {
   const { duties } = props;
@@ -56,14 +56,14 @@ const DutyTable = (props) => {
           }),
         onRowUpdate: (newData, oldData) =>
           new Promise((resolve, reject) => {
-            // dispatch(updatePosition(newData))
-            //   .then((updatedPosition) => {
-            //     const data = [...positions];
-            //     data[data.indexOf(oldData)] = updatedPosition;
-            //     setPositions(data);
-            //   })
-            //   .catch(() => reject())
-            //   .then(() => resolve());
+            dispatch(updateDuty(newData))
+              .then((updatedDuty) => {
+                const data = [...duty];
+                data[data.indexOf(oldData)] = updatedDuty;
+                setDuty(data);
+              })
+              .catch(() => reject())
+              .then(() => resolve());
           }),
       }}
     />
