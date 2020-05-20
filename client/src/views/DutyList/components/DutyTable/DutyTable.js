@@ -18,7 +18,8 @@ const DutyTable = (props) => {
     columns: [
       { title: 'Id', field: '_id', hidden: true },
       { title: 'Duty', field: 'duty', width: 60, editable: 'onAdd' },
-      { title: 'Description', field: 'description', width: 300 },
+      { title: 'Description', field: 'description', width: 250 },
+      { title: 'Rate per day', field: 'rate', width: 100, type: 'numeric' },
       {
         title: 'Last updated',
         field: 'updatedAt',

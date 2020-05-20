@@ -37,7 +37,7 @@ export const updateDuty = (duty) => async (dispatch) => {
     .then((res) => {
       // Toggle on notification
       dispatch(setSnackbarMessageSuccess(res.data.msg));
-      return Promise.resolve(res.data.duty);
+      return Promise.resolve(res.data.duties);
     })
     .catch((err) => {
       // Toggle on notification

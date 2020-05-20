@@ -26,11 +26,11 @@ router.route('/add').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {
-      const { description, duty } = req.body;
+      const { description, duty, rate } = req.body;
       let errorMessage = '';
 
       // User validation
-      if (!duty || !description) {
+      if (!duty || !description || !rate) {
         errorMessage = 'Please enter all fields';
         return res.status(400).json(errorMessage);
       }
@@ -38,22 +38,23 @@ router.route('/add').post((req, res) => {
       // Save if passed validation
       Duty.findOne({ duty: duty }).then((duties) => {
         if (duties) {
-          errorMessage = `duty ${duty} already exist`;
+          errorMessage = `Duty ${duty} already exist`;
           return res.status(400).json(errorMessage);
         } else {
           const newDuty = new Duty({
             duty,
             description,
+            rate,
           });
 
           newDuty
             .save()
             .then((duties) => {
-              return res.json({ msg: `duty ${duty} created successful!`, duties });
+              return res.json({ msg: `Duty ${duty} created successful!`, duties });
             })
             .catch((err) => {
               console.log(err);
-              errorMessage = 'Duty could not be updated at the moment. Please try again.';
+              errorMessage = 'This duty could not be updated at the moment. Please try again.';
               return res.status(400).json(errorMessage);
             });
         }
@@ -69,24 +70,24 @@ router.route('/update').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {
-      const { description, _id } = req.body;
+      const { duty, description, rate, _id } = req.body;
       let errorMessage = '';
 
       // Description validation
-      if (!description) {
-        errorMessage = 'Please enter the description';
+      if (!description || !rate) {
+        errorMessage = 'Please enter all fields';
         return res.status(400).json(errorMessage);
       }
 
       // Update if passed validation
-      Duty.findByIdAndUpdate({ _id: _id }, { $set: { description: description } }, { new: true }, (err, doc) => {
+      Duty.findByIdAndUpdate({ _id: _id }, { $set: { description: description, rate: rate } }, { new: true }, (err, doc) => {
         if (err) {
-          errorMessage = 'Description could not be updated at the moment. Please try again.';
+          errorMessage = 'This duty could not be updated at the moment. Please try again.';
           return res.status(400).json(errorMessage);
         } else {
           Duty.findOne({ _id: _id })
-            .then((duty) => {
-              return res.json({ msg: 'Description update successful!', duty });
+            .then((duties) => {
+              return res.json({ msg: `Duty ${duty} update successful!`, duties });
             })
             .catch((err) => {
               return res.status(400).json(err);

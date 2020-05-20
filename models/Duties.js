@@ -10,6 +10,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    rate: {
+      type: Number,
+      required: true,
+    },
   },
   {
     timestamps: true,
