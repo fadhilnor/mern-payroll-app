@@ -18,7 +18,8 @@ const PositionTable = (props) => {
     columns: [
       { title: 'Id', field: '_id', hidden: true },
       { title: 'Position', field: 'position', width: 60, editable: 'onAdd' },
-      { title: 'Description', field: 'description', width: 300 },
+      { title: 'Description', field: 'description', width: 250 },
+      { title: 'Rate multiplier', field: 'rate', width: 60, type: 'numeric' },
       {
         title: 'Last updated',
         field: 'updatedAt',

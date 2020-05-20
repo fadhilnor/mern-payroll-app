@@ -26,11 +26,11 @@ router.route('/add').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {
-      const { description, position } = req.body;
+      const { description, position, rate } = req.body;
       let errorMessage = '';
 
       // User validation
-      if (!position || !description) {
+      if (!position || !description || !rate) {
         errorMessage = 'Please enter all fields';
         return res.status(400).json(errorMessage);
       }
@@ -44,6 +44,7 @@ router.route('/add').post((req, res) => {
           const newPosition = new Position({
             position,
             description,
+            rate,
           });
 
           newPosition
@@ -53,7 +54,7 @@ router.route('/add').post((req, res) => {
             })
             .catch((err) => {
               console.log(err);
-              errorMessage = 'Position could not be updated at the moment. Please try again.';
+              errorMessage = 'This position could not be updated at the moment. Please try again.';
               return res.status(400).json(errorMessage);
             });
         }
@@ -69,24 +70,24 @@ router.route('/update').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {
-      const { description, _id } = req.body;
+      const { position, description, rate, _id } = req.body;
       let errorMessage = '';
 
       // Description validation
-      if (!description) {
-        errorMessage = 'Please enter the description';
+      if (!description || !rate) {
+        errorMessage = 'Please enter all fields';
         return res.status(400).json(errorMessage);
       }
 
       // Update if passed validation
-      Position.findByIdAndUpdate({ _id: _id }, { $set: { description: description } }, { new: true }, (err, doc) => {
+      Position.findByIdAndUpdate({ _id: _id }, { $set: { description: description, rate: rate } }, { new: true }, (err, doc) => {
         if (err) {
-          errorMessage = 'Description could not be updated at the moment. Please try again.';
+          errorMessage = 'This position could not be updated at the moment. Please try again.';
           return res.status(400).json(errorMessage);
         } else {
           Position.findOne({ _id: _id })
-            .then((position) => {
-              return res.json({ msg: 'Description update successful!', position });
+            .then((positions) => {
+              return res.json({ msg: `Position ${position} update successful!`, position: positions });
             })
             .catch((err) => {
               return res.status(400).json(err);
