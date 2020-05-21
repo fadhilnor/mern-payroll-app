@@ -8,3 +8,4 @@ export const MSG_REMOVE = 'MSG_REMOVE';
 
 export const GET_POSITIONS = 'GET_POSITIONS';
 export const GET_DUTIES = 'GET_DUTIES';
+export const GET_EMPLOYEES = 'GET_EMPLOYEES';
