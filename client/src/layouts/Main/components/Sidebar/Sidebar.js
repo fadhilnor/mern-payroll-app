@@ -9,6 +9,7 @@ import InputIcon from '@material-ui/icons/Input';
 import SettingsIcon from '@material-ui/icons/Settings';
 import LocalParkingIcon from '@material-ui/icons/LocalParking';
 import WorkIcon from '@material-ui/icons/Work';
+import PeopleIcon from '@material-ui/icons/People';
 
 import { Profile, SidebarNav } from './components';
 import { logoutUser } from '../../../../services/authServices';
@@ -50,6 +51,11 @@ const Sidebar = (props) => {
       title: 'Dashboard',
       href: '/dashboard',
       icon: <DashboardIcon />,
+    },
+    {
+      title: 'Employees',
+      href: '/employees',
+      icon: <PeopleIcon />,
     },
     {
       title: 'Positions',

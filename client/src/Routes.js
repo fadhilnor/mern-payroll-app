@@ -9,6 +9,7 @@ import {
   Settings as SettingsView,
   PositionList as PositionListView,
   DutyList as DutyListView,
+  EmployeeList as EmployeeListView,
 } from './views';
 
 const Routes = () => {
@@ -21,6 +22,7 @@ const Routes = () => {
         <PrivateRoute component={SettingsView} layout={MainLayout} exact path="/settings" />
         <PrivateRoute component={PositionListView} layout={MainLayout} exact path="/positions" />
         <PrivateRoute component={DutyListView} layout={MainLayout} exact path="/duties" />
+        <PrivateRoute component={EmployeeListView} layout={MainLayout} exact path="/employees" />
       </Switch>
     </Router>
   );
