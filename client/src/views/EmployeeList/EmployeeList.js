@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/styles';
 
 import { EmployeeTable } from './components';
 import { getEmployees } from '../../services/employeeServices';
+import { getPositions } from '../../services/positionServices';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,19 +19,25 @@ const PositionList = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { employee } = useSelector((state) => state.employees);
+  const { position } = useSelector((state) => state.positions);
 
   const loadEmployees = useCallback(async () => {
     dispatch(getEmployees());
   }, [dispatch]);
 
+  const loadPositions = useCallback(async () => {
+    dispatch(getPositions());
+  }, [dispatch]);
+
   useEffect(() => {
     loadEmployees();
-  }, [loadEmployees]);
+    loadPositions();
+  }, [loadEmployees, loadPositions]);
 
   return (
     <div className={classes.root}>
       <div className={classes.content}>
-        <EmployeeTable employee={employee} />
+        <EmployeeTable employee={employee} position={position} />
       </div>
     </div>
   );

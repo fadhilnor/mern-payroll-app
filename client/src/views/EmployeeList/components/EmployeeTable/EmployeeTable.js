@@ -3,10 +3,13 @@ import { useDispatch } from 'react-redux';
 import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
 
+import { addEmployee } from '../../../../services/employeeServices';
+
 const EmployeeTable = (props) => {
-  const { employee } = props;
+  const { employee, position } = props;
   const dispatch = useDispatch();
   let [employees, setEmployees] = useState(employee);
+  const positionLookup = position.reduce((obj, item) => Object.assign(obj, { [item.position]: item.position }), {});
 
   useEffect(() => {
     setEmployees(employee);
@@ -15,9 +18,10 @@ const EmployeeTable = (props) => {
   const state = {
     columns: [
       { title: 'Id', field: '_id', hidden: true },
-      { title: 'Employee Id', field: 'empId', width: 60, editable: 'onAdd' },
-      { title: 'Name', field: 'name', width: 250 },
-      { title: 'Position', field: 'position', width: 60 },
+      { title: 'Employee Id', field: 'empId', width: 30, editable: 'never' },
+      { title: 'First Name', field: 'firstName', width: 100 },
+      { title: 'Last Name', field: 'lastName', width: 100 },
+      { title: 'Position', field: 'position', width: 60, lookup: positionLookup },
       {
         title: 'Last updated',
         field: 'updatedAt',
@@ -44,7 +48,15 @@ const EmployeeTable = (props) => {
         headerStyle: { backgroundColor: '#5c6bc0', color: 'white' },
       }}
       editable={{
-        onRowAdd: (newData) => new Promise((resolve, reject) => {}),
+        onRowAdd: (newData) =>
+          new Promise((resolve, reject) => {
+            dispatch(addEmployee(newData))
+              .then((data) => {
+                setEmployees([...employees, data]);
+              })
+              .catch(() => reject())
+              .then(() => resolve());
+          }),
         onRowUpdate: (newData, oldData) => new Promise((resolve, reject) => {}),
       }}
     />
