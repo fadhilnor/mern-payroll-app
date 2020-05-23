@@ -30,6 +30,22 @@ export const addEmployee = (employee) => async (dispatch) => {
     });
 };
 
+// Update employee
+export const updateEmployee = (employee) => async (dispatch) => {
+  return await axios
+    .post('/employees/update', employee)
+    .then((res) => {
+      // Toggle on notification
+      dispatch(setSnackbarMessageSuccess(res.data.msg));
+      return Promise.resolve(res.data.employee);
+    })
+    .catch((err) => {
+      // Toggle on notification
+      dispatch(setSnackbarMessageError(err.response.data));
+      return Promise.reject();
+    });
+};
+
 // Set employee
 export const setEmployees = (payload) => {
   return {

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
 
-import { addEmployee } from '../../../../services/employeeServices';
+import { addEmployee, updateEmployee } from '../../../../services/employeeServices';
 
 const EmployeeTable = (props) => {
   const { employee, position } = props;
@@ -57,7 +57,17 @@ const EmployeeTable = (props) => {
               .catch(() => reject())
               .then(() => resolve());
           }),
-        onRowUpdate: (newData, oldData) => new Promise((resolve, reject) => {}),
+        onRowUpdate: (newData, oldData) =>
+          new Promise((resolve, reject) => {
+            dispatch(updateEmployee(newData))
+              .then((updatedEmployee) => {
+                const data = [...employees];
+                data[data.indexOf(oldData)] = updatedEmployee;
+                setEmployees(data);
+              })
+              .catch(() => reject())
+              .then(() => resolve());
+          }),
       }}
     />
   );
