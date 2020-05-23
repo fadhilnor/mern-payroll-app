@@ -29,7 +29,7 @@ router.route('/add').post((req, res) => {
       const { firstName, lastName, position } = req.body;
       let errorMessage = '';
 
-      // User validation
+      // Employee validation
       if (!firstName || !lastName || !position) {
         errorMessage = 'Please enter all fields';
         return res.status(400).json(errorMessage);
@@ -51,6 +51,46 @@ router.route('/add').post((req, res) => {
           errorMessage = 'This employee could not be updated at the moment. Please try again.';
           return res.status(400).json(errorMessage);
         });
+    })
+    .catch((err) => {
+      return res.status(400).json(err);
+    });
+});
+
+// Update employee info
+router.route('/update').post((req, res) => {
+  const token = req.headers['x-access-token'] || req.headers['authorization'];
+  verifyToken(token)
+    .then(() => {
+      const { firstName, lastName, position, _id } = req.body;
+      let errorMessage = '';
+
+      // Employee validation
+      if (!firstName || !lastName || !position) {
+        errorMessage = 'Please enter all fields';
+        return res.status(400).json(errorMessage);
+      }
+
+      // Update if passed validation
+      Employee.findByIdAndUpdate(
+        { _id: _id },
+        { $set: { firstName: firstName, lastName: lastName, position: position } },
+        { new: true },
+        (err, doc) => {
+          if (err) {
+            errorMessage = 'This employee could not be updated at the moment. Please try again.';
+            return res.status(400).json(errorMessage);
+          } else {
+            Employee.findOne({ _id: _id })
+              .then((employees) => {
+                return res.json({ msg: `Employee ${firstName} ${lastName} update successful!`, employee: employees });
+              })
+              .catch((err) => {
+                return res.status(400).json(err);
+              });
+          }
+        }
+      );
     })
     .catch((err) => {
       return res.status(400).json(err);
