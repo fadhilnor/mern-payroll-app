@@ -6,6 +6,7 @@ import MainLayout from './layouts/Main/Main';
 
 import {
   Dashboard as DashboardView,
+  Payroll as PayrollView,
   Settings as SettingsView,
   PositionList as PositionListView,
   DutyList as DutyListView,
@@ -19,6 +20,7 @@ const Routes = () => {
       <Route exact path="/register" component={PublicRoute} />
       <Switch>
         <PrivateRoute component={DashboardView} layout={MainLayout} exact path="/dashboard" />
+        <PrivateRoute component={PayrollView} layout={MainLayout} exact path="/payrolls" />
         <PrivateRoute component={SettingsView} layout={MainLayout} exact path="/settings" />
         <PrivateRoute component={PositionListView} layout={MainLayout} exact path="/positions" />
         <PrivateRoute component={DutyListView} layout={MainLayout} exact path="/duties" />
