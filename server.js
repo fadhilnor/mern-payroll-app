@@ -51,10 +51,12 @@ const usersRouter = require('./routes/api/users');
 const positionsRouter = require('./routes/api/positions');
 const dutiesRouter = require('./routes/api/duties');
 const employeesRouter = require('./routes/api/employees');
+const payrollsRouter = require('./routes/api/payrolls');
 app.use('/users', usersRouter);
 app.use('/positions', positionsRouter);
 app.use('/duties', dutiesRouter);
 app.use('/employees', employeesRouter);
+app.use('/payrolls', payrollsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
