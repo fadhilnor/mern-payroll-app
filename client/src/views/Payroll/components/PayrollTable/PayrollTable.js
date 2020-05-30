@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import MaterialTable from 'material-table';
+import MaterialTable, { MTableToolbar } from 'material-table';
 import PropTypes from 'prop-types';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import { Button, InputLabel, Select, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 
 const PayrollTable = (props) => {
-  const { payroll } = props;
+  const { payroll, employee } = props;
   let [payrolls, setPayrolls] = useState(payroll);
+  const [open, setOpen] = useState(false);
+  const [values, setValues] = useState({
+    empId: '',
+    month: new Date(),
+  });
 
   useEffect(() => {
     setPayrolls(payroll);
@@ -29,7 +37,7 @@ const PayrollTable = (props) => {
       },
       { title: 'Employee Id', field: 'empId', width: 60 },
       { title: 'First Name', field: 'firstName', hidden: true },
-      { title: 'Last Name', field: 'LastName', hidden: true },
+      { title: 'Last Name', field: 'lastName', hidden: true },
       {
         title: 'Name',
         field: 'name',
@@ -54,6 +62,33 @@ const PayrollTable = (props) => {
     ],
   };
 
+  const handleAddNew = () => {
+    console.log(values);
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleChange = (event) => {
+    setValues({
+      ...values,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleDateChange = (date) => {
+    setValues({
+      ...values,
+      month: date,
+    });
+  };
+
   return (
     <MaterialTable
       title=""
@@ -61,6 +96,52 @@ const PayrollTable = (props) => {
       data={payrolls}
       options={{
         headerStyle: { backgroundColor: '#5c6bc0', color: 'white' },
+      }}
+      components={{
+        Toolbar: (props) => (
+          <div>
+            <MTableToolbar {...props} />
+            <div style={{ padding: '10px 10px' }}>
+              <Button color="primary" variant="outlined" onClick={handleOpen}>
+                Add new payroll
+              </Button>
+              <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Add New Payroll</DialogTitle>
+                <DialogContent>
+                  <InputLabel id="empIdLabel">Employee Name</InputLabel>
+                  <Select native label="Name" name="empId" value={values.empId} onLoad={handleChange} onChange={handleChange}>
+                    <option></option>
+                    {employee.map((e, key) => (
+                      <option value={e.empId} key={key}>
+                        {e.firstName} {e.lastName} ({e.empId})
+                      </option>
+                    ))}
+                  </Select>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <InputLabel id="monthLabel">Payroll Month</InputLabel>
+                    <KeyboardDatePicker
+                      disableToolbar
+                      variant="inline"
+                      format="MMMM yyyy"
+                      margin="normal"
+                      id="date-picker-inline"
+                      value={values.month}
+                      onChange={handleDateChange}
+                    />
+                  </MuiPickersUtilsProvider>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={handleAddNew} color="primary" disabled={!values.empId}>
+                    Add
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+          </div>
+        ),
       }}
     />
   );
