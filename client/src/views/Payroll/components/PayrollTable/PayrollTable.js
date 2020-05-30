@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import MaterialTable, { MTableToolbar } from 'material-table';
 import PropTypes from 'prop-types';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-import { Button, InputLabel, Select, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+
+import { AddNewDialog } from '../../components';
 
 const PayrollTable = (props) => {
   const { payroll, employee } = props;
   let [payrolls, setPayrolls] = useState(payroll);
   const [open, setOpen] = useState(false);
-  const [values, setValues] = useState({
-    empId: '',
-    month: new Date(),
-  });
 
   useEffect(() => {
     setPayrolls(payroll);
@@ -62,31 +58,12 @@ const PayrollTable = (props) => {
     ],
   };
 
-  const handleAddNew = () => {
-    console.log(values);
-    setOpen(false);
-  };
-
   const handleOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value,
-    });
-  };
-
-  const handleDateChange = (date) => {
-    setValues({
-      ...values,
-      month: date,
-    });
   };
 
   return (
@@ -105,40 +82,7 @@ const PayrollTable = (props) => {
               <Button color="primary" variant="outlined" onClick={handleOpen}>
                 Add new payroll
               </Button>
-              <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Add New Payroll</DialogTitle>
-                <DialogContent>
-                  <InputLabel id="empIdLabel">Employee Name</InputLabel>
-                  <Select native label="Name" name="empId" value={values.empId} onLoad={handleChange} onChange={handleChange}>
-                    <option></option>
-                    {employee.map((e, key) => (
-                      <option value={e.empId} key={key}>
-                        {e.firstName} {e.lastName} ({e.empId})
-                      </option>
-                    ))}
-                  </Select>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <InputLabel id="monthLabel">Payroll Month</InputLabel>
-                    <KeyboardDatePicker
-                      disableToolbar
-                      variant="inline"
-                      format="MMMM yyyy"
-                      margin="normal"
-                      id="date-picker-inline"
-                      value={values.month}
-                      onChange={handleDateChange}
-                    />
-                  </MuiPickersUtilsProvider>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose} color="primary">
-                    Cancel
-                  </Button>
-                  <Button onClick={handleAddNew} color="primary" disabled={!values.empId}>
-                    Add
-                  </Button>
-                </DialogActions>
-              </Dialog>
+              <AddNewDialog open={open} onHandleClose={handleClose} employee={employee} />
             </div>
           </div>
         ),
