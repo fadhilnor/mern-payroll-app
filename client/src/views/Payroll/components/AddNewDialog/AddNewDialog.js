@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Button,
@@ -14,6 +15,8 @@ import {
 } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+
+import { addPayroll } from '../../../../services/payrollServices';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -38,7 +41,8 @@ const useStyles = makeStyles((theme) => ({
 
 const AddNewDialog = (props) => {
   const classes = useStyles();
-  const { open, onHandleClose, employee } = props;
+  const dispatch = useDispatch();
+  const { open, onHandleClose, onHandleSetPayrolls, employee } = props;
   const [values, setValues] = useState({
     empId: '',
     month: new Date(),
@@ -63,8 +67,17 @@ const AddNewDialog = (props) => {
   };
 
   const handleAddNew = () => {
-    console.log(values);
-    onHandleClose(false);
+    const newPayroll = {
+      empId: values.empId,
+      month: (values.month.getMonth() + 1).toString() + ',' + values.month.getUTCFullYear().toString(),
+    };
+
+    dispatch(addPayroll(newPayroll))
+      .then((data) => {
+        onHandleSetPayrolls(data);
+        onHandleClose(false);
+      })
+      .catch(() => {});
   };
 
   return (

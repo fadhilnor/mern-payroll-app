@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MaterialTable, { MTableToolbar } from 'material-table';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { Button } from '@material-ui/core';
 
 import { AddNewDialog } from '../../components';
@@ -22,7 +23,15 @@ const PayrollTable = (props) => {
         title: 'Month',
         field: 'month',
         width: 60,
-        render: (rowData) => rowData && rowData.month && <p>{new Date(rowData.month).toDateString()}</p>,
+        render: (rowData) =>
+          rowData &&
+          rowData.month && (
+            <p>
+              {moment(
+                new Date(rowData.month.substring(rowData.month.length - 4) + '-' + rowData.month.substring(0, 1) + '-1')
+              ).format('MMMM yyyy')}
+            </p>
+          ),
         customSort: (a, b) => {
           var a1 = new Date(a.month).getTime();
           var b1 = new Date(b.month).getTime();
@@ -66,6 +75,10 @@ const PayrollTable = (props) => {
     setOpen(false);
   };
 
+  const handleSetPayrolls = (data) => {
+    setPayrolls([...payrolls, data]);
+  };
+
   return (
     <MaterialTable
       title=""
@@ -82,7 +95,7 @@ const PayrollTable = (props) => {
               <Button color="primary" variant="outlined" onClick={handleOpen}>
                 Add new payroll
               </Button>
-              <AddNewDialog open={open} onHandleClose={handleClose} employee={employee} />
+              <AddNewDialog open={open} onHandleClose={handleClose} onHandleSetPayrolls={handleSetPayrolls} employee={employee} />
             </div>
           </div>
         ),
