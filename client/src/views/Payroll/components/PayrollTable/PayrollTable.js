@@ -18,11 +18,11 @@ const PayrollTable = (props) => {
   const state = {
     columns: [
       { title: 'Id', field: '_id', hidden: true },
-      { title: 'Payroll Id', field: 'payId', width: 60 },
+      { title: 'Payroll Id', field: 'payId', width: 30 },
       {
         title: 'Month',
         field: 'month',
-        width: 60,
+        width: 40,
         render: (rowData) =>
           rowData &&
           rowData.month && (
@@ -33,23 +33,16 @@ const PayrollTable = (props) => {
             </p>
           ),
         customSort: (a, b) => {
-          var a1 = new Date(a.month).getTime();
-          var b1 = new Date(b.month).getTime();
+          var a1 = new Date(a.month.substring(a.month.length - 4) + '-' + a.month.substring(0, 1) + '-1').getTime();
+          var b1 = new Date(b.month.substring(b.month.length - 4) + '-' + b.month.substring(0, 1) + '-1').getTime();
           if (a1 < b1) return 1;
           else if (a1 > b1) return -1;
           else return 0;
         },
       },
-      { title: 'Employee Id', field: 'empId', width: 60 },
-      { title: 'First Name', field: 'firstName', hidden: true },
-      { title: 'Last Name', field: 'lastName', hidden: true },
-      {
-        title: 'Name',
-        field: 'name',
-        width: 150,
-        render: (rowData) =>
-          rowData && rowData.firstName && rowData.lastName && <p>{rowData.firstName + ' ' + rowData.lastName}</p>,
-      },
+      { title: 'Employee Id', field: 'empId', width: 30 },
+      { title: 'First Name', field: 'firstName', width: 30 },
+      { title: 'Last Name', field: 'lastName', width: 30 },
       {
         title: 'Last updated',
         field: 'updatedAt',
