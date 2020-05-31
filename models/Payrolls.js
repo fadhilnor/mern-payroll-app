@@ -8,7 +8,7 @@ const PayrollSchema = new mongoose.Schema(
       required: true,
     },
     month: {
-      type: Date,
+      type: String,
       required: true,
     },
     firstName: {
