@@ -104,6 +104,25 @@ router.route('/add').post((req, res) => {
     });
 });
 
+// Get payroll employee
+router.route('/getPayrollEmployees').post((req, res) => {
+  const token = req.headers['x-access-token'] || req.headers['authorization'];
+  verifyToken(token)
+    .then(() => {
+      const { payId } = req.body;
+      PayrollEmployee.find({ payId: payId })
+        .then((payroll) => {
+          return res.json(payroll);
+        })
+        .catch((err) => {
+          return res.status(400).json('Error: ' + err);
+        });
+    })
+    .catch((err) => {
+      return res.status(400).json(err);
+    });
+});
+
 const getDaysInMonth = (month, year) => {
   return new Date(year, month, 0).getDate();
 };
