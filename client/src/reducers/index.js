@@ -6,6 +6,7 @@ import positionReducer from './positionReducer';
 import dutyReducer from './dutyReducers';
 import employeeReducer from './employeeReducer';
 import payrollReducer from './payrollReducer';
+import payrollEmployeeReducer from './payrollEmployeeReducer';
 
 export default combineReducers({
   auth: authReducer,
@@ -15,4 +16,5 @@ export default combineReducers({
   duties: dutyReducer,
   employees: employeeReducer,
   payrolls: payrollReducer,
+  payrollEmployees: payrollEmployeeReducer,
 });
