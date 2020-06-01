@@ -2,6 +2,7 @@ const router = require('express').Router();
 
 const Payroll = require('../../models/Payrolls');
 const Employee = require('../../models/Employees');
+const PayrollEmployee = require('../../models/PayrollEmployee');
 const verifyToken = require('../../utils/verifyToken');
 
 // Get all payroll
@@ -10,6 +11,7 @@ router.route('/getAll').post((req, res) => {
   verifyToken(token)
     .then(() => {
       Payroll.find()
+        .sort({ payId: -1 })
         .then((payroll) => {
           return res.json(payroll);
         })
@@ -57,10 +59,29 @@ router.route('/add').post((req, res) => {
                 newPayroll
                   .save()
                   .then((payrolls) => {
-                    return res.json({
-                      msg: `Payroll for ${newPayroll.firstName} ${newPayroll.lastName} created successful!`,
-                      payrolls,
-                    });
+                    // Save employee payroll
+                    const daysInMonth = getDaysInMonth(month.substring(0, 1), month.substring(month.length - 4));
+                    const newPayrollEmployee = Array(daysInMonth)
+                      .fill()
+                      .map((v, i) => ({
+                        day: ++i,
+                        payId: payrolls.payId,
+                        empId: empId,
+                        duty: 'None',
+                        amount: 0,
+                      }));
+
+                    PayrollEmployee.insertMany(newPayrollEmployee)
+                      .then((empPayroll) => {
+                        return res.json({
+                          msg: `Payroll for ${newPayroll.firstName} ${newPayroll.lastName} created successful!`,
+                          payrolls,
+                        });
+                      })
+                      .catch((err) => {
+                        errorMessage = 'This payroll could not be created at the moment. Please try again.';
+                        return res.status(400).json(errorMessage);
+                      });
                   })
                   .catch((err) => {
                     errorMessage = 'This payroll could not be created at the moment. Please try again.';
@@ -82,5 +103,9 @@ router.route('/add').post((req, res) => {
       return res.status(400).json(err);
     });
 });
+
+const getDaysInMonth = (month, year) => {
+  return new Date(year, month, 0).getDate();
+};
 
 module.exports = router;
