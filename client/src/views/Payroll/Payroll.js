@@ -1,10 +1,11 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 
-import { PayrollTable } from './components';
+import { PayrollTable, EmployeePayrollTable } from './components';
 import { getPayrolls } from '../../services/payrollServices';
 import { getEmployees } from '../../services/employeeServices';
+import { getDuties } from '../../services/dutyServices';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +21,8 @@ const Payroll = () => {
   const dispatch = useDispatch();
   const { payroll } = useSelector((state) => state.payrolls);
   const { employee } = useSelector((state) => state.employees);
+  const { duty } = useSelector((state) => state.duties);
+  const [payrollTable, setPayrollTable] = useState(true);
 
   const loadPayrolls = useCallback(async () => {
     dispatch(getPayrolls());
@@ -29,15 +32,25 @@ const Payroll = () => {
     dispatch(getEmployees());
   }, [dispatch]);
 
+  const loadDuties = useCallback(async () => {
+    dispatch(getDuties());
+  }, [dispatch]);
+
   useEffect(() => {
     loadPayrolls();
     loadEmployees();
-  }, [loadPayrolls, loadEmployees]);
+    loadDuties();
+  }, [loadPayrolls, loadEmployees, loadDuties]);
+
+  const handleToggle = () => {
+    setPayrollTable(!payrollTable);
+  };
 
   return (
     <div className={classes.root}>
       <div className={classes.content}>
-        <PayrollTable payroll={payroll} employee={employee} />
+        {payrollTable && <PayrollTable payroll={payroll} employee={employee} onHandleToggle={handleToggle} />}
+        {!payrollTable && <EmployeePayrollTable duties={duty} onHandleToggle={handleToggle} />}
       </div>
     </div>
   );

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import MaterialTable, { MTableToolbar } from 'material-table';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Button } from '@material-ui/core';
 
 import { AddNewDialog } from '../../components';
+import { getPayrollEmployees } from '../../../../services/payrollEmployeeServices';
 
 const PayrollTable = (props) => {
-  const { payroll, employee } = props;
+  const { payroll, employee, onHandleToggle } = props;
+  const dispatch = useDispatch();
   let [payrolls, setPayrolls] = useState(payroll);
   const [open, setOpen] = useState(false);
 
@@ -18,7 +21,16 @@ const PayrollTable = (props) => {
   const state = {
     columns: [
       { title: 'Id', field: '_id', hidden: true },
-      { title: 'Payroll Id', field: 'payId', width: 30 },
+      {
+        title: 'Payroll Id',
+        field: 'payId',
+        width: 30,
+        render: (rowData) => (
+          <a href={rowData.payId} onClick={handleClick(rowData.payId)}>
+            {rowData.payId}
+          </a>
+        ),
+      },
       {
         title: 'Month',
         field: 'month',
@@ -44,7 +56,7 @@ const PayrollTable = (props) => {
       { title: 'First Name', field: 'firstName', width: 30 },
       { title: 'Last Name', field: 'lastName', width: 30 },
       {
-        title: 'Last updated',
+        title: 'Created On',
         field: 'updatedAt',
         width: 40,
         editable: 'never',
@@ -60,6 +72,15 @@ const PayrollTable = (props) => {
     ],
   };
 
+  const handleClick = (payId) => (e) => {
+    e.preventDefault();
+    const newPayId = {
+      payId,
+    };
+    dispatch(getPayrollEmployees(newPayId));
+    onHandleToggle();
+  };
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -69,7 +90,7 @@ const PayrollTable = (props) => {
   };
 
   const handleSetPayrolls = (data) => {
-    setPayrolls([...payrolls, data]);
+    setPayrolls([data, ...payrolls]);
   };
 
   return (
