@@ -132,7 +132,7 @@ router.route('/updatePayrollEmployees').post((req, res) => {
       let errorMessage = '';
 
       // Payroll validation
-      if (!duty || !amount) {
+      if (!duty) {
         errorMessage = 'Please enter all fields';
         return res.status(400).json(errorMessage);
       }
