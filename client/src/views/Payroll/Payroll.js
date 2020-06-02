@@ -58,7 +58,13 @@ const Payroll = () => {
       <div className={classes.content}>
         {payrollTable && <PayrollTable payroll={payroll} employee={employee} onHandleToggle={handleToggle} />}
         {!payrollTable && (
-          <EmployeePayrollTable duties={duty} positions={position} employee={employee} onHandleToggle={handleToggle} />
+          <EmployeePayrollTable
+            payroll={payroll}
+            duties={duty}
+            positions={position}
+            employee={employee}
+            onHandleToggle={handleToggle}
+          />
         )}
       </div>
     </div>

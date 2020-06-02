@@ -3,15 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import MaterialTable, { MTableToolbar } from 'material-table';
 import { Button, Select, MenuItem } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import { updatePayrollEmployee } from '../../../../services/payrollEmployeeServices';
 
 const EmployeePayrollTable = (props) => {
-  const { duties, positions, employee, onHandleToggle } = props;
+  const { payroll, duties, positions, employee, onHandleToggle } = props;
   const dispatch = useDispatch();
-  const { payrollEmployees, empId } = useSelector((state) => state.payrollEmployees);
+  const { payrollEmployees, empId, payId } = useSelector((state) => state.payrollEmployees);
   let [employeePayrolls, setEmployeePayroll] = useState(payrollEmployees);
   const employeePosition = employee.find((o) => o.empId === empId);
+  const employeePayroll = payroll.find((o) => o.payId === payId);
+  let payrollTitle = '';
+  const [selectedRow, setSelectedRow] = useState(null);
 
   useEffect(() => {
     setEmployeePayroll(payrollEmployees);
@@ -75,14 +79,29 @@ const EmployeePayrollTable = (props) => {
     return obj.rate;
   };
 
+  const convertStringToDateFormat = (date) => {
+    return moment(new Date(date.substring(date.length - 4) + '-' + date.substring(0, 1) + '-1')).format('MMMM yyyy');
+  };
+
+  if (employeePosition !== undefined && employeePayroll !== undefined) {
+    payrollTitle =
+      convertStringToDateFormat(employeePayroll.month) +
+      ` - ${employeePosition.firstName} ${employeePosition.lastName} (${employeePosition.empId})`;
+  }
+
   return (
     <MaterialTable
-      title=""
+      title={payrollTitle}
       columns={state.columns}
       data={employeePayrolls}
+      onRowClick={(evt, selectedRow) => setSelectedRow(selectedRow.tableData.id)}
       options={{
         headerStyle: { backgroundColor: '#5c6bc0', color: 'white' },
         pageSize: 20,
+        rowStyle: (rowData) => ({
+          backgroundColor: selectedRow === rowData.tableData.id ? '#EEE' : '#FFF',
+          height: '1px',
+        }),
       }}
       components={{
         Toolbar: (props) => (

@@ -10,6 +10,7 @@ export const getPayrollEmployees = (newPayroll) => (dispatch) => {
       const payroll = {
         payrollEmployees: res.data,
         empId: newPayroll.empId,
+        payId: newPayroll.payId,
       };
       dispatch(setPayrollEmployees(payroll));
     })
