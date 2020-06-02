@@ -24,11 +24,10 @@ const EmployeePayrollTable = (props) => {
   const state = {
     columns: [
       { title: 'Id', field: '_id', hidden: true },
-      { title: 'Day', field: 'day', width: 30, editable: 'never' },
+      { title: 'Day', field: 'day', editable: 'never' },
       {
         title: 'Duty',
         field: 'duty',
-        width: 60,
         editComponent: (props) => (
           <Select
             value={props.value}
@@ -47,11 +46,19 @@ const EmployeePayrollTable = (props) => {
           </Select>
         ),
       },
-      { title: 'Amount', field: 'amount', width: 60, type: 'numeric', editable: 'never' },
+      {
+        title: 'Amount',
+        field: 'amount',
+        type: 'numeric',
+        editable: 'never',
+        cellStyle: {
+          textAllign: 'left',
+          fontWeight: 'bold',
+        },
+      },
       {
         title: 'Last updated',
         field: 'updatedAt',
-        width: 40,
         editable: 'never',
         render: (rowData) => rowData && rowData.updatedAt && <p>{new Date(rowData.updatedAt).toDateString()}</p>,
         customSort: (a, b) => {
@@ -96,11 +103,14 @@ const EmployeePayrollTable = (props) => {
       data={employeePayrolls}
       onRowClick={(evt, selectedRow) => setSelectedRow(selectedRow.tableData.id)}
       options={{
-        headerStyle: { backgroundColor: '#5c6bc0', color: 'white' },
+        exportButton: true,
+        exportAllData: true,
+        headerStyle: { backgroundColor: '#5c6bc0', color: 'white', fontSize: 15, fontWeight: 'bold', textAllign: 'center' },
+        cellStyle: { padding: '0.1em' },
         pageSize: 20,
         rowStyle: (rowData) => ({
           backgroundColor: selectedRow === rowData.tableData.id ? '#EEE' : '#FFF',
-          height: '1px',
+          textAllign: 'center',
         }),
       }}
       components={{
