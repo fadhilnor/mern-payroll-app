@@ -14,11 +14,12 @@ const EmployeePayrollTable = (props) => {
   let [employeePayrolls, setEmployeePayroll] = useState(payrollEmployees);
   const employeePosition = employee.find((o) => o.empId === empId);
   const employeePayroll = payroll.find((o) => o.payId === payId);
-  let payrollTitle = '';
   const [selectedRow, setSelectedRow] = useState(null);
+  const [totalAmount, setTotalAmount] = useState(0);
 
   useEffect(() => {
     setEmployeePayroll(payrollEmployees);
+    setTotalAmount(calculateTotalAmount(payrollEmployees));
   }, [payrollEmployees]);
 
   const state = {
@@ -86,10 +87,15 @@ const EmployeePayrollTable = (props) => {
     return obj.rate;
   };
 
+  const calculateTotalAmount = (arr) => {
+    return arr.map((item) => item.amount).reduce((prev, next) => prev + next, 0) || 0;
+  };
+
   const convertStringToDateFormat = (date) => {
     return moment(new Date(date.substring(date.length - 4) + '-' + date.substring(0, 1) + '-1')).format('MMMM yyyy');
   };
 
+  let payrollTitle = '';
   if (employeePosition !== undefined && employeePayroll !== undefined) {
     payrollTitle =
       convertStringToDateFormat(employeePayroll.month) +
@@ -121,6 +127,9 @@ const EmployeePayrollTable = (props) => {
               <Button color="primary" variant="outlined" onClick={handleOpen}>
                 Back
               </Button>
+              <Button style={{ marginLeft: '5px', fontWeight: 'bold' }} color="secondary" variant="outlined">
+                Total Amount: {totalAmount}
+              </Button>
             </div>
           </div>
         ),
@@ -133,6 +142,7 @@ const EmployeePayrollTable = (props) => {
                 const data = [...employeePayrolls];
                 data[data.indexOf(oldData)] = updatedDuty;
                 setEmployeePayroll(data);
+                setTotalAmount(calculateTotalAmount(data));
               })
               .catch(() => reject())
               .then(() => resolve());
