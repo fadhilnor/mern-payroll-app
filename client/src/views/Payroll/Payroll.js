@@ -6,6 +6,7 @@ import { PayrollTable, EmployeePayrollTable } from './components';
 import { getPayrolls } from '../../services/payrollServices';
 import { getEmployees } from '../../services/employeeServices';
 import { getDuties } from '../../services/dutyServices';
+import { getPositions } from '../../services/positionServices';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +23,7 @@ const Payroll = () => {
   const { payroll } = useSelector((state) => state.payrolls);
   const { employee } = useSelector((state) => state.employees);
   const { duty } = useSelector((state) => state.duties);
+  const { position } = useSelector((state) => state.positions);
   const [payrollTable, setPayrollTable] = useState(true);
 
   const loadPayrolls = useCallback(async () => {
@@ -36,11 +38,16 @@ const Payroll = () => {
     dispatch(getDuties());
   }, [dispatch]);
 
+  const loadPositions = useCallback(async () => {
+    dispatch(getPositions());
+  }, [dispatch]);
+
   useEffect(() => {
     loadPayrolls();
     loadEmployees();
     loadDuties();
-  }, [loadPayrolls, loadEmployees, loadDuties]);
+    loadPositions();
+  }, [loadPayrolls, loadEmployees, loadDuties, loadPositions]);
 
   const handleToggle = () => {
     setPayrollTable(!payrollTable);
@@ -50,7 +57,9 @@ const Payroll = () => {
     <div className={classes.root}>
       <div className={classes.content}>
         {payrollTable && <PayrollTable payroll={payroll} employee={employee} onHandleToggle={handleToggle} />}
-        {!payrollTable && <EmployeePayrollTable duties={duty} onHandleToggle={handleToggle} />}
+        {!payrollTable && (
+          <EmployeePayrollTable duties={duty} positions={position} employee={employee} onHandleToggle={handleToggle} />
+        )}
       </div>
     </div>
   );

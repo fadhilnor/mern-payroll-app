@@ -26,7 +26,7 @@ const PayrollTable = (props) => {
         field: 'payId',
         width: 30,
         render: (rowData) => (
-          <a href={rowData.payId} onClick={handleClick(rowData.payId)}>
+          <a href={rowData.payId} onClick={handleClick(rowData.payId, rowData.empId)}>
             {rowData.payId}
           </a>
         ),
@@ -72,12 +72,13 @@ const PayrollTable = (props) => {
     ],
   };
 
-  const handleClick = (payId) => (e) => {
+  const handleClick = (payId, empId) => (e) => {
     e.preventDefault();
-    const newPayId = {
+    const newPayroll = {
       payId,
+      empId,
     };
-    dispatch(getPayrollEmployees(newPayId));
+    dispatch(getPayrollEmployees(newPayroll));
     onHandleToggle();
   };
 
