@@ -2,6 +2,7 @@ import { GET_PAYROLLS_EMPLOYEES } from '../services/types';
 
 const initialState = {
   payrollEmployees: [],
+  empId: 0,
 };
 
 export default function (state = initialState, action) {
@@ -9,7 +10,8 @@ export default function (state = initialState, action) {
     case GET_PAYROLLS_EMPLOYEES:
       return {
         ...state,
-        payrollEmployees: [...action.payload],
+        payrollEmployees: [...action.payload.payrollEmployees],
+        empId: action.payload.empId,
       };
     default:
       return state;
