@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import MaterialTable, { MTableToolbar } from 'material-table';
-import { Button } from '@material-ui/core';
+import { Button, Select, MenuItem } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
+import { updatePayrollEmployee } from '../../../../services/payrollEmployeeServices';
+
 const EmployeePayrollTable = (props) => {
-  const { duties, onHandleToggle } = props;
+  const { duties, positions, employee, onHandleToggle } = props;
   const dispatch = useDispatch();
-  const { payrollEmployees } = useSelector((state) => state.payrollEmployees);
+  const { payrollEmployees, empId } = useSelector((state) => state.payrollEmployees);
   let [employeePayrolls, setEmployeePayroll] = useState(payrollEmployees);
-  const dutiesLookup = duties.reduce((obj, item) => Object.assign(obj, { [item.duty]: item.duty }), {});
+  const employeePosition = employee.find((o) => o.empId === empId);
 
   useEffect(() => {
     setEmployeePayroll(payrollEmployees);
@@ -19,7 +21,28 @@ const EmployeePayrollTable = (props) => {
     columns: [
       { title: 'Id', field: '_id', hidden: true },
       { title: 'Day', field: 'day', width: 30, editable: 'never' },
-      { title: 'Duty', field: 'duty', width: 60, lookup: dutiesLookup },
+      {
+        title: 'Duty',
+        field: 'duty',
+        width: 60,
+        editComponent: (props) => (
+          <Select
+            value={props.value}
+            onChange={(e) => {
+              var data = { ...props.rowData };
+              data.duty = e.target.value;
+              data.amount = getRateFromDuty(e.target.value) * getRateFromPosition();
+              props.onRowDataChange(data);
+            }}
+          >
+            {duties.map((e, key) => (
+              <MenuItem value={e.duty} key={key}>
+                {e.duty}
+              </MenuItem>
+            ))}
+          </Select>
+        ),
+      },
       { title: 'Amount', field: 'amount', width: 60, type: 'numeric', editable: 'never' },
       {
         title: 'Last updated',
@@ -40,6 +63,16 @@ const EmployeePayrollTable = (props) => {
 
   const handleOpen = () => {
     onHandleToggle();
+  };
+
+  const getRateFromDuty = (duty) => {
+    let obj = duties.find((o) => o.duty === duty);
+    return obj.rate;
+  };
+
+  const getRateFromPosition = () => {
+    let obj = positions.find((o) => o.position === employeePosition.position);
+    return obj.rate;
   };
 
   return (
@@ -64,7 +97,17 @@ const EmployeePayrollTable = (props) => {
         ),
       }}
       editable={{
-        onRowUpdate: (newData, oldData) => new Promise((resolve, reject) => {}),
+        onRowUpdate: (newData, oldData) =>
+          new Promise((resolve, reject) => {
+            dispatch(updatePayrollEmployee(newData))
+              .then((updatedDuty) => {
+                const data = [...employeePayrolls];
+                data[data.indexOf(oldData)] = updatedDuty;
+                setEmployeePayroll(data);
+              })
+              .catch(() => reject())
+              .then(() => resolve());
+          }),
       }}
     />
   );
