@@ -123,6 +123,41 @@ router.route('/getPayrollEmployees').post((req, res) => {
     });
 });
 
+// Update payroll employee
+router.route('/updatePayrollEmployees').post((req, res) => {
+  const token = req.headers['x-access-token'] || req.headers['authorization'];
+  verifyToken(token)
+    .then(() => {
+      const { duty, amount, day, _id } = req.body;
+      let errorMessage = '';
+
+      // Payroll validation
+      if (!duty || !amount) {
+        errorMessage = 'Please enter all fields';
+        return res.status(400).json(errorMessage);
+      }
+
+      // Update if passed validation
+      PayrollEmployee.findByIdAndUpdate({ _id: _id }, { $set: { duty: duty, amount: amount } }, { new: true }, (err, doc) => {
+        if (err) {
+          errorMessage = 'This date could not be updated at the moment. Please try again.';
+          return res.status(400).json(errorMessage);
+        } else {
+          PayrollEmployee.findOne({ _id: _id })
+            .then((payrolls) => {
+              return res.json({ msg: `Payroll Day ${day} update successful!`, payroll: payrolls });
+            })
+            .catch((err) => {
+              return res.status(400).json(err);
+            });
+        }
+      });
+    })
+    .catch((err) => {
+      return res.status(400).json(err);
+    });
+});
+
 const getDaysInMonth = (month, year) => {
   return new Date(year, month, 0).getDate();
 };
