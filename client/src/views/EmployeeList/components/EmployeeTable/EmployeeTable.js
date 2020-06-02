@@ -19,8 +19,8 @@ const EmployeeTable = (props) => {
     columns: [
       { title: 'Id', field: '_id', hidden: true },
       { title: 'Employee Id', field: 'empId', width: 30, editable: 'never' },
-      { title: 'First Name', field: 'firstName', width: 100 },
-      { title: 'Last Name', field: 'lastName', width: 100 },
+      { title: 'First Name', field: 'firstName', width: 100, editable: 'onAdd' },
+      { title: 'Last Name', field: 'lastName', width: 100, editable: 'onAdd' },
       { title: 'Position', field: 'position', width: 60, lookup: positionLookup },
       {
         title: 'Last updated',
