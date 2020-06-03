@@ -48,9 +48,8 @@ const EmployeePayrollTable = (props) => {
         ),
       },
       {
-        title: 'Amount',
+        title: 'Amount ($)',
         field: 'amount',
-        type: 'numeric',
         editable: 'never',
         cellStyle: {
           textAllign: 'left',
@@ -111,12 +110,11 @@ const EmployeePayrollTable = (props) => {
       options={{
         exportButton: true,
         exportAllData: true,
-        headerStyle: { backgroundColor: '#5c6bc0', color: 'white', fontSize: 15, fontWeight: 'bold', textAllign: 'center' },
-        cellStyle: { padding: '0.1em' },
+        headerStyle: { backgroundColor: '#5c6bc0', color: 'white', fontSize: 15, fontWeight: 'bold', textAllign: 'left' },
+        cellStyle: { padding: '0.1em', textAllign: 'center' },
         pageSize: 20,
         rowStyle: (rowData) => ({
           backgroundColor: selectedRow === rowData.tableData.id ? '#EEE' : '#FFF',
-          textAllign: 'center',
         }),
       }}
       components={{
@@ -128,7 +126,7 @@ const EmployeePayrollTable = (props) => {
                 Back
               </Button>
               <Button style={{ marginLeft: '5px', fontWeight: 'bold' }} color="secondary" variant="outlined">
-                Total Amount: {totalAmount}
+                Total Amount: $ {totalAmount}
               </Button>
             </div>
           </div>
