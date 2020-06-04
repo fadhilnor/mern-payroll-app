@@ -53,7 +53,6 @@ const TopDuties = (props) => {
     // Calculate the sums and group data
     const reduced = arr
       .filter((x) => x[groupBy] !== 'None')
-      .sort((a, b) => (a[groupBy] > b[groupBy] ? 1 : -1))
       .reduce(function (m, d) {
         if (!m[d[groupBy]]) {
           m[d[groupBy]] = { ...d, count: 1 };
@@ -72,7 +71,7 @@ const TopDuties = (props) => {
       };
     });
 
-    return result;
+    return result.sort((a, b) => (a.percentage > b.percentage ? -1 : 1));
   };
 
   const payrollDuties = getGroupedPayrollData(employePayrolls, 'duty');
