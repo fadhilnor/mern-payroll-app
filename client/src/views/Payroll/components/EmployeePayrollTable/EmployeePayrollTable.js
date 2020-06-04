@@ -35,7 +35,7 @@ const EmployeePayrollTable = (props) => {
             onChange={(e) => {
               var data = { ...props.rowData };
               data.duty = e.target.value;
-              data.amount = getRateFromDuty(e.target.value) * getRateFromPosition();
+              data.amount = (getRateFromDuty(e.target.value) * getRateFromPosition()).toFixed(2);
               props.onRowDataChange(data);
             }}
           >
