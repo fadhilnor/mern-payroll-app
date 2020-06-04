@@ -24,6 +24,24 @@ router.route('/getAll').post((req, res) => {
     });
 });
 
+// Get all payroll employee
+router.route('/getAllPayrollEmployees').post((req, res) => {
+  const token = req.headers['x-access-token'] || req.headers['authorization'];
+  verifyToken(token)
+    .then(() => {
+      PayrollEmployee.find()
+        .then((payroll) => {
+          return res.json(payroll);
+        })
+        .catch((err) => {
+          return res.status(400).json('Error: ' + err);
+        });
+    })
+    .catch((err) => {
+      return res.status(400).json(err);
+    });
+});
+
 // Add new payroll
 router.route('/add').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
@@ -64,8 +82,9 @@ router.route('/add').post((req, res) => {
                     const newPayrollEmployee = Array(daysInMonth)
                       .fill()
                       .map((v, i) => ({
-                        day: ++i,
+                        month: month,
                         payId: payrolls.payId,
+                        day: ++i,
                         empId: empId,
                         duty: 'None',
                         amount: 0,
