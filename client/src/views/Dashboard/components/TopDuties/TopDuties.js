@@ -79,7 +79,7 @@ const TopDuties = (props) => {
   const data = {
     datasets: [
       {
-        data: payrollDuties.map((item) => item.count),
+        data: payrollDuties.map((item) => item.percentage),
         backgroundColor: colors,
         borderWidth: 8,
         borderColor: theme.palette.white,
