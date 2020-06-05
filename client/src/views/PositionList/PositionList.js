@@ -18,6 +18,7 @@ const PositionList = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { position } = useSelector((state) => state.positions);
+  const { user } = useSelector((state) => state.auth);
 
   const loadPositions = useCallback(async () => {
     dispatch(getPositions());
@@ -30,7 +31,7 @@ const PositionList = () => {
   return (
     <div className={classes.root}>
       <div className={classes.content}>
-        <PositionTable position={position} />
+        <PositionTable position={position} user={user} />
       </div>
     </div>
   );

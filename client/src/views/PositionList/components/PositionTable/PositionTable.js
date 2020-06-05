@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { addPosition, updatePosition } from '../../../../services/positionServices';
 
 const PositionTable = (props) => {
-  const { position } = props;
+  const { position, user } = props;
   const dispatch = useDispatch();
   let [positions, setPositions] = useState(position);
 
@@ -48,23 +48,36 @@ const PositionTable = (props) => {
       editable={{
         onRowAdd: (newData) =>
           new Promise((resolve, reject) => {
-            dispatch(addPosition(newData))
-              .then((data) => {
-                setPositions([...positions, data]);
-              })
-              .catch(() => reject())
-              .then(() => resolve());
+            if (user.isDemoUser) {
+              setPositions([...positions, newData]);
+              resolve();
+            } else {
+              dispatch(addPosition(newData))
+                .then((data) => {
+                  setPositions([...positions, data]);
+                })
+                .catch(() => reject())
+                .then(() => resolve());
+            }
           }),
         onRowUpdate: (newData, oldData) =>
           new Promise((resolve, reject) => {
-            dispatch(updatePosition(newData))
-              .then((updatedPosition) => {
-                const data = [...positions];
-                data[data.indexOf(oldData)] = updatedPosition;
-                setPositions(data);
-              })
-              .catch(() => reject())
-              .then(() => resolve());
+            if (user.isDemoUser) {
+              const dataUpdate = [...positions];
+              const index = oldData.tableData.id;
+              dataUpdate[index] = newData;
+              setPositions([...dataUpdate]);
+              resolve();
+            } else {
+              dispatch(updatePosition(newData))
+                .then((updatedPosition) => {
+                  const data = [...positions];
+                  data[data.indexOf(oldData)] = updatedPosition;
+                  setPositions(data);
+                })
+                .catch(() => reject())
+                .then(() => resolve());
+            }
           }),
       }}
     />
