@@ -8,7 +8,8 @@ router.route('/getAll').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {
-      Position.find()
+      const { userId } = req.body;
+      Position.find({ userId: userId })
         .then((position) => {
           return res.json(position);
         })
@@ -26,7 +27,7 @@ router.route('/add').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {
-      const { description, position, rate } = req.body;
+      const { userId, description, position, rate } = req.body;
       let errorMessage = '';
 
       // User validation
@@ -36,12 +37,13 @@ router.route('/add').post((req, res) => {
       }
 
       // Save if passed validation
-      Position.findOne({ position: position }).then((positions) => {
+      Position.findOne({ userId: userId, position: position }).then((positions) => {
         if (positions) {
           errorMessage = `Position ${position} already exist`;
           return res.status(400).json(errorMessage);
         } else {
           const newPosition = new Position({
+            userId,
             position,
             description,
             rate,

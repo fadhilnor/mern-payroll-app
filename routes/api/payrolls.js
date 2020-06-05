@@ -10,7 +10,8 @@ router.route('/getAll').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {
-      Payroll.find()
+      const { userId } = req.body;
+      Payroll.find({ userId: userId })
         .sort({ payId: -1 })
         .then((payroll) => {
           return res.json(payroll);
@@ -29,7 +30,8 @@ router.route('/getAllPayrollEmployees').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {
-      PayrollEmployee.find()
+      const { userId } = req.body;
+      PayrollEmployee.find({ userId: userId })
         .then((payroll) => {
           return res.json(payroll);
         })
@@ -47,7 +49,7 @@ router.route('/add').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {
-      const { empId, month } = req.body;
+      const { userId, empId, month } = req.body;
       let errorMessage = '';
 
       // User validation
@@ -57,7 +59,7 @@ router.route('/add').post((req, res) => {
       }
 
       // Check if payroll already exist for employee
-      Payroll.findOne({ empId: empId, month: month }).then((payrolls) => {
+      Payroll.findOne({ userId: userId, empId: empId, month: month }).then((payrolls) => {
         if (payrolls) {
           errorMessage = `Payroll for the month already exist`;
           return res.status(400).json(errorMessage);
@@ -67,6 +69,7 @@ router.route('/add').post((req, res) => {
             .then((employee) => {
               if (employee) {
                 const newPayroll = new Payroll({
+                  userId,
                   empId,
                   month,
                   firstName: employee.firstName,
@@ -82,6 +85,7 @@ router.route('/add').post((req, res) => {
                     const newPayrollEmployee = Array(daysInMonth)
                       .fill()
                       .map((v, i) => ({
+                        userId,
                         month: month,
                         payId: payrolls.payId,
                         day: ++i,

@@ -3,10 +3,13 @@ import { GET_PAYROLLS } from './types';
 import { setSnackbarMessageSuccess, setSnackbarMessageError } from './snackbarServices';
 import { setUserLoading } from './authServices';
 
+const userId = localStorage.getItem('userId');
+
 // Get all payrolls
 export const getPayrolls = () => (dispatch) => {
+  const user = { userId };
   axios
-    .post('/payrolls/getAll')
+    .post('/payrolls/getAll', user)
     .then((res) => {
       dispatch(setPayrolls(res.data));
     })
@@ -17,6 +20,8 @@ export const getPayrolls = () => (dispatch) => {
 
 // Add new payroll
 export const addPayroll = (payroll) => async (dispatch) => {
+  payroll.userId = userId;
+
   // Toggle on loading animation
   dispatch(setUserLoading(true));
 

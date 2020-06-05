@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 
 let User = require('../../models/Users');
+const Duty = require('../../models/Duties');
 const assignToken = require('../../utils/assignToken');
 const verifyToken = require('../../utils/verifyToken');
 
@@ -73,13 +74,27 @@ router.route('/register').post((req, res) => {
             newUser
               .save()
               .then((user) => {
-                // Assign token to new user
-                assignToken(user)
-                  .then((token) => {
-                    return res.json({
-                      success: true,
-                      token: 'Bearer ' + token,
-                    });
+                // Add default duty
+                const newDuty = new Duty({
+                  userId: user.userId,
+                  duty: 'None',
+                  description: 'None',
+                  rate: 0,
+                });
+
+                newDuty
+                  .save()
+                  .then((duty) => {
+                    // Assign token to new user
+                    assignToken(user)
+                      .then((token) => {
+                        return res.json({
+                          success: true,
+                          token: 'Bearer ' + token,
+                          user,
+                        });
+                      })
+                      .catch((err) => res.status(400).json({ error: err }));
                   })
                   .catch((err) => res.status(400).json({ error: err }));
               })
@@ -125,6 +140,7 @@ router.route('/login').post((req, res, next) => {
             return res.json({
               success: true,
               token: 'Bearer ' + token,
+              user,
             });
           })
           .catch((err) => res.status(400).json({ error: err }));

@@ -3,6 +3,10 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const PayrollSchema = new mongoose.Schema(
   {
+    userId: {
+      type: Number,
+      required: true,
+    },
     empId: {
       type: Number,
       required: true,

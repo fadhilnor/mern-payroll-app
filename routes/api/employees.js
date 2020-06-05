@@ -8,7 +8,8 @@ router.route('/getAll').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {
-      Employee.find()
+      const { userId } = req.body;
+      Employee.find({ userId: userId })
         .then((employee) => {
           return res.json(employee);
         })
@@ -26,7 +27,7 @@ router.route('/add').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {
-      const { firstName, lastName, position } = req.body;
+      const { userId, firstName, lastName, position } = req.body;
       let errorMessage = '';
 
       // Employee validation
@@ -37,6 +38,7 @@ router.route('/add').post((req, res) => {
 
       // Save if passed validation
       const newEmployee = new Employee({
+        userId,
         firstName,
         lastName,
         position,

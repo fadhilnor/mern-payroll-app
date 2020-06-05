@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const PayrollEmployeeSchema = new mongoose.Schema(
   {
+    userId: {
+      type: Number,
+      required: true,
+    },
     payId: {
       type: Number,
       required: true,

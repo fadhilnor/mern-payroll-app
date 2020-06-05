@@ -3,6 +3,10 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const EmployeeSchema = new mongoose.Schema(
   {
+    userId: {
+      type: Number,
+      required: true,
+    },
     firstName: {
       type: String,
       required: true,

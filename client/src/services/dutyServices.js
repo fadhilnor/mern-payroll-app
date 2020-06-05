@@ -2,10 +2,13 @@ import axios from 'axios';
 import { GET_DUTIES } from './types';
 import { setSnackbarMessageSuccess, setSnackbarMessageError } from './snackbarServices';
 
+const userId = localStorage.getItem('userId');
+
 // Get all duties
 export const getDuties = () => (dispatch) => {
+  const user = { userId };
   axios
-    .post('/duties/getAll')
+    .post('/duties/getAll', user)
     .then((res) => {
       dispatch(setDuties(res.data));
     })
@@ -16,6 +19,7 @@ export const getDuties = () => (dispatch) => {
 
 // Add new duty
 export const addDuty = (duty) => async (dispatch) => {
+  duty.userId = userId;
   return await axios
     .post('/duties/add', duty)
     .then((res) => {

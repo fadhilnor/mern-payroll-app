@@ -8,7 +8,8 @@ router.route('/getAll').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {
-      Duty.find()
+      const { userId } = req.body;
+      Duty.find({ userId: userId })
         .then((duty) => {
           return res.json(duty);
         })
@@ -26,7 +27,7 @@ router.route('/add').post((req, res) => {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   verifyToken(token)
     .then(() => {
-      const { description, duty, rate } = req.body;
+      const { userId, description, duty, rate } = req.body;
       let errorMessage = '';
 
       // User validation
@@ -36,12 +37,13 @@ router.route('/add').post((req, res) => {
       }
 
       // Save if passed validation
-      Duty.findOne({ duty: duty }).then((duties) => {
+      Duty.findOne({ userId: userId, duty: duty }).then((duties) => {
         if (duties) {
           errorMessage = `Duty ${duty} already exist`;
           return res.status(400).json(errorMessage);
         } else {
           const newDuty = new Duty({
+            userId,
             duty,
             description,
             rate,

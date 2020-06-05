@@ -2,8 +2,11 @@ import axios from 'axios';
 import { GET_PAYROLLS_EMPLOYEES } from './types';
 import { setSnackbarMessageSuccess, setSnackbarMessageError } from './snackbarServices';
 
+const userId = localStorage.getItem('userId');
+
 // Get payroll employee
 export const getPayrollEmployees = (newPayroll) => (dispatch) => {
+  newPayroll.userId = userId;
   axios
     .post('/payrolls/getPayrollEmployees', newPayroll)
     .then((res) => {

@@ -15,8 +15,9 @@ export const registerUser = (userData) => (dispatch) => {
     .post('/users/register', userData)
     .then((res) => {
       // Process token from server
-      const { token } = res.data;
+      const { token, user } = res.data;
       processToken(token).then((decoded) => {
+        localStorage.setItem('userId', user.userId);
         // Set current user
         dispatch(setCurrentUser(decoded));
         // Toggle off loading animation
@@ -41,10 +42,11 @@ export const loginUser = (userData) => (dispatch) => {
     .post('/users/login', userData)
     .then((res) => {
       // Process token from server
-      const { token } = res.data;
+      const { token, user } = res.data;
       processToken(token).then((decoded) => {
         // Set current user
         dispatch(setCurrentUser(decoded));
+        localStorage.setItem('userId', user.userId);
         // Toggle off loading animation
         dispatch(setUserLoading(false));
       });
@@ -103,6 +105,7 @@ export const setUserLoading = (payload) => {
 export const logoutUser = () => (dispatch) => {
   // Remove token from local storage
   localStorage.removeItem('jwtToken');
+  localStorage.removeItem('userId');
   // Remove auth header for future requests
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
