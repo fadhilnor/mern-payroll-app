@@ -1,12 +1,13 @@
 const jwt = require('jsonwebtoken');
 
-module.exports = assignToken = (user) => {
+module.exports = assignToken = (user, isDemoUser) => {
   return new Promise((resolve, reject) => {
     // Create JWT Payload
     const payload = {
       id: user.id,
       name: user.name,
       email: user.email,
+      isDemoUser,
     };
 
     // Create token

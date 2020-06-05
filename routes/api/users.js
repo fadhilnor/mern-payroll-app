@@ -86,7 +86,7 @@ router.route('/register').post((req, res) => {
                   .save()
                   .then((duty) => {
                     // Assign token to new user
-                    assignToken(user)
+                    assignToken(user, false)
                       .then((token) => {
                         return res.json({
                           success: true,
@@ -108,7 +108,11 @@ router.route('/register').post((req, res) => {
 
 // Login
 router.route('/login').post((req, res, next) => {
-  const { email, password } = req.body;
+  req.body.email = req.body.isDemoUser ? process.env.demoEmail || require('../../config/keys').demoEmail : req.body.email;
+  req.body.password = req.body.isDemoUser
+    ? process.env.demoPassword || require('../../config/keys').demoPassword
+    : req.body.password;
+  const { email, password, isDemoUser } = req.body;
   let errors = [];
 
   // User validation
@@ -135,7 +139,7 @@ router.route('/login').post((req, res, next) => {
           return res.status(400).json({ error: errors });
         }
         // Assign token to user
-        assignToken(user)
+        assignToken(user, isDemoUser)
           .then((token) => {
             return res.json({
               success: true,

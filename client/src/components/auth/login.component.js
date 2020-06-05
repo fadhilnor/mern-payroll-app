@@ -17,6 +17,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import { Divider } from '@material-ui/core';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -49,8 +50,12 @@ const styles = (theme) => ({
     marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(2, 0, 1),
     background: 'linear-gradient(to right bottom, #6200ea, #3f51b5)',
+  },
+  demo: {
+    margin: theme.spacing(1, 0, 1),
+    background: theme.palette.success.main,
   },
   list: {
     marginTop: theme.spacing(1),
@@ -61,6 +66,9 @@ const styles = (theme) => ({
     marginTop: theme.spacing(1),
     backgroundColor: '#fffde7',
     color: 'green',
+  },
+  divider: {
+    margin: theme.spacing(2, 0),
   },
 });
 
@@ -80,6 +88,7 @@ class LoginComponent extends Component {
     this.onChange = this.onChange.bind(this);
     this.onToggleShowPassword = this.onToggleShowPassword.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onHandleDemo = this.onHandleDemo.bind(this);
   }
 
   componentDidMount() {
@@ -133,6 +142,14 @@ class LoginComponent extends Component {
       password: this.state.password,
     };
 
+    this.props.loginUser(user);
+  }
+
+  onHandleDemo(e) {
+    e.preventDefault();
+    const user = {
+      isDemoUser: true,
+    };
     this.props.loginUser(user);
   }
 
@@ -204,6 +221,10 @@ class LoginComponent extends Component {
             )}
             <Button type="submit" fullWidth variant="contained" color="primary" className={this.props.classes.submit}>
               Sign In
+            </Button>
+            <Divider className={this.props.classes.divider} />
+            <Button fullWidth variant="contained" color="primary" className={this.props.classes.demo} onClick={this.onHandleDemo}>
+              Try the demo!
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
