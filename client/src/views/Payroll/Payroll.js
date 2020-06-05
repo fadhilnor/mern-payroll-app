@@ -24,6 +24,7 @@ const Payroll = () => {
   const { employee } = useSelector((state) => state.employees);
   const { duty } = useSelector((state) => state.duties);
   const { position } = useSelector((state) => state.positions);
+  const { user } = useSelector((state) => state.auth);
   const [payrollTable, setPayrollTable] = useState(true);
 
   const loadPayrolls = useCallback(async () => {
@@ -56,13 +57,14 @@ const Payroll = () => {
   return (
     <div className={classes.root}>
       <div className={classes.content}>
-        {payrollTable && <PayrollTable payroll={payroll} employee={employee} onHandleToggle={handleToggle} />}
+        {payrollTable && <PayrollTable payroll={payroll} employee={employee} user={user} onHandleToggle={handleToggle} />}
         {!payrollTable && (
           <EmployeePayrollTable
             payroll={payroll}
             duties={duty}
             positions={position}
             employee={employee}
+            user={user}
             onHandleToggle={handleToggle}
           />
         )}

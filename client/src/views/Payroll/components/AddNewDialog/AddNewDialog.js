@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const AddNewDialog = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { open, onHandleClose, onHandleSetPayrolls, employee } = props;
+  const { open, onHandleClose, onHandleSetPayrolls, employee, user } = props;
   const [values, setValues] = useState({
     empId: '',
     month: new Date(),
@@ -67,6 +67,7 @@ const AddNewDialog = (props) => {
   };
 
   const handleAddNew = () => {
+    if (user.isDemoUser) return;
     const newPayroll = {
       empId: values.empId,
       month: (values.month.getMonth() + 1).toString() + ',' + values.month.getUTCFullYear().toString(),

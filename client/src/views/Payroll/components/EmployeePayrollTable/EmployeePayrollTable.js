@@ -8,7 +8,7 @@ import moment from 'moment';
 import { updatePayrollEmployee } from '../../../../services/payrollEmployeeServices';
 
 const EmployeePayrollTable = (props) => {
-  const { payroll, duties, positions, employee, onHandleToggle } = props;
+  const { payroll, duties, positions, employee, user, onHandleToggle } = props;
   const dispatch = useDispatch();
   const { payrollEmployees, empId, payId } = useSelector((state) => state.payrollEmployees);
   let [employeePayrolls, setEmployeePayroll] = useState(payrollEmployees);
@@ -135,15 +135,25 @@ const EmployeePayrollTable = (props) => {
       editable={{
         onRowUpdate: (newData, oldData) =>
           new Promise((resolve, reject) => {
-            dispatch(updatePayrollEmployee(newData))
-              .then((updatedDuty) => {
-                const data = [...employeePayrolls];
-                data[data.indexOf(oldData)] = updatedDuty;
-                setEmployeePayroll(data);
-                setTotalAmount(calculateTotalAmount(data));
-              })
-              .catch(() => reject())
-              .then(() => resolve());
+            if (user.isDemoUser) {
+              newData.amount = newData.amount - 0;
+              const dataUpdate = [...employeePayrolls];
+              const index = oldData.tableData.id;
+              dataUpdate[index] = newData;
+              setEmployeePayroll(dataUpdate);
+              setTotalAmount(calculateTotalAmount(dataUpdate));
+              resolve();
+            } else {
+              dispatch(updatePayrollEmployee(newData))
+                .then((updatedDuty) => {
+                  const data = [...employeePayrolls];
+                  data[data.indexOf(oldData)] = updatedDuty;
+                  setEmployeePayroll(data);
+                  setTotalAmount(calculateTotalAmount(data));
+                })
+                .catch(() => reject())
+                .then(() => resolve());
+            }
           }),
       }}
     />

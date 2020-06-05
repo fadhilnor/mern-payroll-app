@@ -9,7 +9,7 @@ import { AddNewDialog } from '../../components';
 import { getPayrollEmployees } from '../../../../services/payrollEmployeeServices';
 
 const PayrollTable = (props) => {
-  const { payroll, employee, onHandleToggle } = props;
+  const { payroll, employee, user, onHandleToggle } = props;
   const dispatch = useDispatch();
   let [payrolls, setPayrolls] = useState(payroll);
   const [open, setOpen] = useState(false);
@@ -110,7 +110,13 @@ const PayrollTable = (props) => {
               <Button color="primary" variant="outlined" onClick={handleOpen}>
                 Add new payroll
               </Button>
-              <AddNewDialog open={open} onHandleClose={handleClose} onHandleSetPayrolls={handleSetPayrolls} employee={employee} />
+              <AddNewDialog
+                open={open}
+                onHandleClose={handleClose}
+                onHandleSetPayrolls={handleSetPayrolls}
+                employee={employee}
+                user={user}
+              />
             </div>
           </div>
         ),
