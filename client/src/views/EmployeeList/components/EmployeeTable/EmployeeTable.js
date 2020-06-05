@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { addEmployee, updateEmployee } from '../../../../services/employeeServices';
 
 const EmployeeTable = (props) => {
-  const { employee, position } = props;
+  const { employee, position, user } = props;
   const dispatch = useDispatch();
   let [employees, setEmployees] = useState(employee);
   const positionLookup = position.reduce((obj, item) => Object.assign(obj, { [item.position]: item.position }), {});
@@ -50,23 +50,36 @@ const EmployeeTable = (props) => {
       editable={{
         onRowAdd: (newData) =>
           new Promise((resolve, reject) => {
-            dispatch(addEmployee(newData))
-              .then((data) => {
-                setEmployees([...employees, data]);
-              })
-              .catch(() => reject())
-              .then(() => resolve());
+            if (user.isDemoUser) {
+              setEmployees([...employees, newData]);
+              resolve();
+            } else {
+              dispatch(addEmployee(newData))
+                .then((data) => {
+                  setEmployees([...employees, data]);
+                })
+                .catch(() => reject())
+                .then(() => resolve());
+            }
           }),
         onRowUpdate: (newData, oldData) =>
           new Promise((resolve, reject) => {
-            dispatch(updateEmployee(newData))
-              .then((updatedEmployee) => {
-                const data = [...employees];
-                data[data.indexOf(oldData)] = updatedEmployee;
-                setEmployees(data);
-              })
-              .catch(() => reject())
-              .then(() => resolve());
+            if (user.isDemoUser) {
+              const dataUpdate = [...employees];
+              const index = oldData.tableData.id;
+              dataUpdate[index] = newData;
+              setEmployees([...dataUpdate]);
+              resolve();
+            } else {
+              dispatch(updateEmployee(newData))
+                .then((updatedEmployee) => {
+                  const data = [...employees];
+                  data[data.indexOf(oldData)] = updatedEmployee;
+                  setEmployees(data);
+                })
+                .catch(() => reject())
+                .then(() => resolve());
+            }
           }),
       }}
     />

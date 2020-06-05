@@ -20,6 +20,7 @@ const PositionList = () => {
   const dispatch = useDispatch();
   const { employee } = useSelector((state) => state.employees);
   const { position } = useSelector((state) => state.positions);
+  const { user } = useSelector((state) => state.auth);
 
   const loadEmployees = useCallback(async () => {
     dispatch(getEmployees());
@@ -37,7 +38,7 @@ const PositionList = () => {
   return (
     <div className={classes.root}>
       <div className={classes.content}>
-        <EmployeeTable employee={employee} position={position} />
+        <EmployeeTable employee={employee} position={position} user={user} />
       </div>
     </div>
   );

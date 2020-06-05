@@ -52,6 +52,7 @@ const Password = (props) => {
   };
 
   const handleUpdate = () => {
+    if (user.isDemoUser) return;
     const newUpdate = {
       email: user.email,
       password: values.password,
