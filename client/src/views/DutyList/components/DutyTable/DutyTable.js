@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { addDuty, updateDuty } from '../../../../services/dutyServices';
 
 const DutyTable = (props) => {
-  const { duties } = props;
+  const { duties, user } = props;
   const dispatch = useDispatch();
   let [duty, setDuty] = useState(duties);
 
@@ -48,23 +48,36 @@ const DutyTable = (props) => {
       editable={{
         onRowAdd: (newData) =>
           new Promise((resolve, reject) => {
-            dispatch(addDuty(newData))
-              .then((data) => {
-                setDuty([...duty, data]);
-              })
-              .catch(() => reject())
-              .then(() => resolve());
+            if (user.isDemoUser) {
+              setDuty([...duty, newData]);
+              resolve();
+            } else {
+              dispatch(addDuty(newData))
+                .then((data) => {
+                  setDuty([...duty, data]);
+                })
+                .catch(() => reject())
+                .then(() => resolve());
+            }
           }),
         onRowUpdate: (newData, oldData) =>
           new Promise((resolve, reject) => {
-            dispatch(updateDuty(newData))
-              .then((updatedDuty) => {
-                const data = [...duty];
-                data[data.indexOf(oldData)] = updatedDuty;
-                setDuty(data);
-              })
-              .catch(() => reject())
-              .then(() => resolve());
+            if (user.isDemoUser) {
+              const dataUpdate = [...duty];
+              const index = oldData.tableData.id;
+              dataUpdate[index] = newData;
+              setDuty([...dataUpdate]);
+              resolve();
+            } else {
+              dispatch(updateDuty(newData))
+                .then((updatedDuty) => {
+                  const data = [...duty];
+                  data[data.indexOf(oldData)] = updatedDuty;
+                  setDuty(data);
+                })
+                .catch(() => reject())
+                .then(() => resolve());
+            }
           }),
       }}
     />

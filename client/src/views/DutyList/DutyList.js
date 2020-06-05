@@ -18,6 +18,7 @@ const DutyList = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { duty } = useSelector((state) => state.duties);
+  const { user } = useSelector((state) => state.auth);
 
   const loadDuties = useCallback(async () => {
     dispatch(getDuties());
@@ -30,7 +31,7 @@ const DutyList = () => {
   return (
     <div className={classes.root}>
       <div className={classes.content}>
-        <DutyTable duties={duty} />
+        <DutyTable duties={duty} user={user} />
       </div>
     </div>
   );
