@@ -87,7 +87,12 @@ const EmployeePayrollTable = (props) => {
   };
 
   const calculateTotalAmount = (arr) => {
-    return arr.map((item) => item.amount).reduce((prev, next) => prev + next, 0) || 0;
+    return (
+      arr
+        .map((item) => item.amount)
+        .reduce((prev, next) => prev + next, 0)
+        .toFixed(2) || 0
+    );
   };
 
   const convertStringToDateFormat = (date) => {

@@ -66,7 +66,8 @@ const AddNewDialog = (props) => {
     });
   };
 
-  const handleAddNew = () => {
+  const handleAddNew = (e) => {
+    e.preventDefault();
     if (user.isDemoUser) return;
     const newPayroll = {
       empId: values.empId,

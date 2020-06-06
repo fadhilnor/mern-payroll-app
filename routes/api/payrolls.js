@@ -134,6 +134,7 @@ router.route('/getPayrollEmployees').post((req, res) => {
     .then(() => {
       const { payId } = req.body;
       PayrollEmployee.find({ payId: payId })
+        .sort({ day: 1 })
         .then((payroll) => {
           return res.json(payroll);
         })

@@ -1,11 +1,15 @@
 import axios from 'axios';
 import { GET_PAYROLLS_EMPLOYEES } from './types';
 import { setSnackbarMessageSuccess, setSnackbarMessageError } from './snackbarServices';
+import { setUserLoading } from './authServices';
 
 const userId = localStorage.getItem('userId');
 
 // Get payroll employee
 export const getPayrollEmployees = (newPayroll) => (dispatch) => {
+  // Toggle on loading animation
+  dispatch(setUserLoading(true));
+
   newPayroll.userId = userId;
   axios
     .post('/payrolls/getPayrollEmployees', newPayroll)
@@ -16,6 +20,9 @@ export const getPayrollEmployees = (newPayroll) => (dispatch) => {
         payId: newPayroll.payId,
       };
       dispatch(setPayrollEmployees(payroll));
+
+      // Toggle off loading animation
+      dispatch(setUserLoading(false));
     })
     .catch((err) => {
       console.log('err', err);

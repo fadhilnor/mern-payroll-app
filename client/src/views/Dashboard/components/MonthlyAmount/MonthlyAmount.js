@@ -69,7 +69,7 @@ const MonthlyAmount = (props) => {
     datasets: [
       {
         backgroundColor: palette.primary.main,
-        data: payrollData.map((item) => item.amount),
+        data: payrollData.map((item) => item.amount.toFixed(2)),
         barThickness: 12,
         maxBarThickness: 10,
         barPercentage: 0.5,
