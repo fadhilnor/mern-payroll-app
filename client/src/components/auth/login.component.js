@@ -224,7 +224,7 @@ class LoginComponent extends Component {
             </Button>
             <Divider className={this.props.classes.divider} />
             <Button fullWidth variant="contained" color="primary" className={this.props.classes.demo} onClick={this.onHandleDemo}>
-              Try the demo!
+              Try the live demo!
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
