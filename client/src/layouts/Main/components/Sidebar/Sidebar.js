@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import { Divider, Drawer, Hidden, IconButton, Typography } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -43,6 +43,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Sidebar = (props) => {
   const { open, variant, onClose, className, ...rest } = props;
+  const { user } = useSelector((state) => state.auth);
+  let signLabel = user.isDemoUser ? 'Sign In or Register' : 'Sign Out';
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -91,7 +93,7 @@ const Sidebar = (props) => {
           <IconButton color="inherit" onClick={() => dispatch(logoutUser())}>
             <InputIcon />
             <Typography className={classes.signOutLabel} color="inherit" variant="body2">
-              Sign Out
+              {signLabel}
             </Typography>
           </IconButton>
         </Hidden>

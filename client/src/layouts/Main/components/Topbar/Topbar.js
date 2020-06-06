@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -40,7 +40,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Topbar = (props) => {
   const { className, onSidebarOpen, ...rest } = props;
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  let signLabel = user.isDemoUser ? 'Sign In or Register' : 'Sign Out';
 
   const classes = useStyles();
 
@@ -57,7 +59,7 @@ const Topbar = (props) => {
         <Hidden smDown>
           <IconButton className={classes.signOutButton} color="inherit" onClick={() => dispatch(logoutUser())}>
             <Typography className={classes.signOutLabel} color="inherit" variant="body2">
-              Sign Out
+              {signLabel}
             </Typography>
             <InputIcon />
           </IconButton>
