@@ -8,6 +8,7 @@ module.exports = assignToken = (user, isDemoUser) => {
       name: user.name,
       email: user.email,
       isDemoUser,
+      avatar: isDemoUser ? process.env.demoAvatar || require('../config/keys').demoAvatar : user.avatar || '',
     };
 
     // Create token
