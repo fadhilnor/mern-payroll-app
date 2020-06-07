@@ -15,7 +15,7 @@ module.exports = assignToken = (user, isDemoUser) => {
       payload,
       process.env.JWTkeys || require('../config/keys').secretOrKey,
       {
-        expiresIn: 31556926, // 1 year in seconds
+        expiresIn: isDemoUser ? 3600 : 31556926, // 1 hour and 1 year in seconds respectively
       },
       (err, token) => {
         if (err) {
