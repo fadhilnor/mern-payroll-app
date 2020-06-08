@@ -155,7 +155,7 @@ class Register extends Component {
     let self = this.state;
     const newUser = {
       name: self.name,
-      email: self.email,
+      email: self.email.toLowerCase().trim(),
       password: self.password,
       passwordConfirm: self.passwordConfirm,
     };
