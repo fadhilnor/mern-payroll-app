@@ -19,7 +19,7 @@ const Footer = (props) => {
     <div {...rest} className={clsx(classes.root, className)}>
       <Typography variant="body2" color="textSecondary" align="center">
         {'Copyright © '}
-        <Link color="inherit" href="#">
+        <Link color="inherit" href="https://fadhilnor.github.io/" target="_blank">
           Fadhil Japar
         </Link>{' '}
         {new Date().getFullYear()}
