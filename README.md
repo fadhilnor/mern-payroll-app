@@ -19,12 +19,14 @@ Mini payroll web app developed using MERN stack.
 - [Material UI](https://material-ui.com/) - UI
 - [Node](https://nodejs.org/en/) - Used for backend
 - [Mongodb](https://www.mongodb.com/) - Database
+- [Chart.js](https://www.chartjs.org) - Charting solutions
 
 ## Features
 
 - Dashboard UI
 - User authentication and authorization
 - Form validation
+- Demo mode
 - Create/update employees, durties and rates
 - Create/export payrolls to CVS format
 
