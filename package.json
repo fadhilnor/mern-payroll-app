@@ -29,5 +29,8 @@
 		"passport": "^0.6.0",
 		"passport-local": "^1.0.0",
 		"passport-session": "^1.0.2"
+	},
+	"devDependencies": {
+		"node": "^16.0.0"
 	}
 }
