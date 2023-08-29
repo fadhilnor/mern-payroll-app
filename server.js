@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 // Passport middleware
 app.use(
 	session({
-		secret: require('./config/keys').secretOrKey,
+		secret: process.env.JWTkeys || require('./config/keys').secretOrKey,
 	})
 );
 app.use(passport.initialize());
